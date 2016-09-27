@@ -14,15 +14,15 @@ public class Server extends UnicastRemoteObject implements IServer {
     protected Server() throws RemoteException {
     }
 
-    public void inscription(IClient client) throws RemoteException {
+    public void register(IClient client) throws RemoteException {
 
     }
 
-    public void encherir(IClient client, int bid) throws RemoteException {
+    public void raise_bid(IClient client, int new_bid) throws RemoteException {
 
     }
 
-    public void temps_ecoule(IClient client) throws RemoteException {
+    public void time_elapsed(IClient client) throws RemoteException {
 
     }
 }

@@ -1,5 +1,7 @@
 package com.alma.pay2bid.common;
 
+import com.alma.pay2bid.Auction;
+
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 
@@ -7,7 +9,7 @@ import java.rmi.RemoteException;
  * Created by E122371M on 27/09/16.
  */
 public interface IClient extends Remote {
-    void soumettre() throws RemoteException;
-    void objet_vendu(IClient acheteur) throws RemoteException;
-    void nouveau_prix(int prix) throws RemoteException;
+    void submit(Auction auction) throws RemoteException;
+    void bid_sold(IClient buyer) throws RemoteException;
+    void new_price(int price) throws RemoteException;
 }

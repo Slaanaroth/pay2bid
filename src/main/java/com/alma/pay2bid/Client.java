@@ -13,15 +13,15 @@ public class Client extends UnicastRemoteObject implements IClient {
     protected Client() throws RemoteException {
     }
 
-    public void soumettre() throws RemoteException {
+    public void submit(Auction auction) throws RemoteException {
 
     }
 
-    public void objet_vendu(IClient acheteur) throws RemoteException {
+    public void bid_sold(IClient buyer) throws RemoteException {
 
     }
 
-    public void nouveau_prix(int prix) throws RemoteException {
+    public void new_price(int price) throws RemoteException {
 
     }
 }
