@@ -49,21 +49,21 @@ public class ClientGui {
     private void prepareView(){
         headerLabel.setText("Control in action: Button");
 
-        JButton okButton = new JButton("OK");
-        JButton submitButton = new JButton("Submit");
-        JButton cancelButton = new JButton("Cancel");
+        JButton okButton = new JButton("newAuction");
+        JButton submitButton = new JButton("raiseBid");
+        //
 
-        okButton.setActionCommand("OK");
-        submitButton.setActionCommand("Submit");
-        cancelButton.setActionCommand("Cancel");
+        okButton.setActionCommand("newAuction");
+        submitButton.setActionCommand("raiseBid");
+        //cancelButton.setActionCommand("Cancel");
 
         okButton.addActionListener(new ButtonClickListener());
         submitButton.addActionListener(new ButtonClickListener());
-        cancelButton.addActionListener(new ButtonClickListener());
+        //cancelButton.addActionListener(new ButtonClickListener());
 
         controlPanel.add(okButton);
         controlPanel.add(submitButton);
-        controlPanel.add(cancelButton);
+        //controlPanel.add(cancelButton);
 
         mainFrame.setVisible(true);
     }
@@ -71,14 +71,11 @@ public class ClientGui {
     private class ButtonClickListener implements ActionListener {
         public void actionPerformed(ActionEvent e) {
             String command = e.getActionCommand();
-            if( command.equals( "OK" ))  {
-                statusLabel.setText("Ok Button clicked.");
+            if( command.equals( "newAuction" ))  {
+                statusLabel.setText("New Auction sent.");
             }
-            else if( command.equals( "Submit" ) )  {
-                statusLabel.setText("Submit Button clicked.");
-            }
-            else  {
-                statusLabel.setText("Cancel Button clicked.");
+            else if( command.equals( "raiseBid" ) )  {
+                statusLabel.setText("New bid sent.");
             }
         }
     }
