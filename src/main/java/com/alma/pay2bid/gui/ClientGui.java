@@ -1,71 +1,140 @@
 package com.alma.pay2bid.gui;
 
+import com.alma.pay2bid.Auction;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * Created by Folkvir(Grall Arnaud)) on 28/09/16.
  */
 public class ClientGui {
     private JFrame mainFrame;
+
+    private JMenuBar menuBar;
+
     private JLabel headerLabel;
     private JLabel statusLabel;
-    private JPanel controlPanel;
 
+    private JPanel controlPanel;
+    private JPanel mainPanel;
+    private JPanel auctionPanel;
+
+    private JButton newAction;
+    private JButton raiseBid;
+
+    private ArrayList<Auction> auctionList;
+
+    private HashMap<String,JPanel> auctionListPanel;
     /**
      * Constructor
      */
     public ClientGui(){
+        auctionList = new ArrayList<Auction>();
+        auctionListPanel = new HashMap<String,JPanel>();
         createGui();
     }
 
     private void createGui(){
         mainFrame = new JFrame("Pay2Bid - Auction");
-        mainFrame.setSize(400,400);
-        mainFrame.setLayout(new GridLayout(3, 1));
+        mainFrame.setSize(500,500);
+        mainFrame.setLayout(new BorderLayout());
+
+
+        menuBar = new JMenuBar();
+        JMenu menu = new JMenu("Options");
+        menu.add(new JMenuItem("New Auction"));
+        menuBar.add(menu);
 
         headerLabel = new JLabel("",JLabel.CENTER );
         statusLabel = new JLabel("",JLabel.CENTER);
+        statusLabel.setBackground(Color.red);
 
-        statusLabel.setSize(350,100);
+        statusLabel.setSize(400,0);
+
         mainFrame.addWindowListener(new WindowAdapter() {
             public void windowClosing(WindowEvent windowEvent){
                 System.exit(0);
             }
         });
+
+        mainPanel = new JPanel();
+        mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
+
         controlPanel = new JPanel();
         controlPanel.setLayout(new FlowLayout());
 
-        mainFrame.add(headerLabel);
-        mainFrame.add(controlPanel);
-        mainFrame.add(statusLabel);
+        auctionPanel = new JPanel();
+        auctionPanel.setLayout(new BoxLayout(auctionPanel, BoxLayout.Y_AXIS));
+
+
+        mainPanel.add(auctionPanel);
+        mainPanel.add(controlPanel);
+
+        mainFrame.add(headerLabel,BorderLayout.PAGE_START);
+        mainFrame.add(mainPanel,BorderLayout.CENTER);
+        mainFrame.add(statusLabel,BorderLayout.PAGE_END);
+
+        mainFrame.setJMenuBar(menuBar);
+
         mainFrame.setVisible(true);
     }
 
     private void prepareView(){
-        headerLabel.setText("Control in action: Button");
+        headerLabel.setText("Current Auction");
 
-        JButton okButton = new JButton("newAuction");
-        JButton submitButton = new JButton("raiseBid");
-        //
+        newAction = new JButton("New Action");
+        raiseBid = new JButton("Raise the Bid");
 
-        okButton.setActionCommand("newAuction");
-        submitButton.setActionCommand("raiseBid");
-        //cancelButton.setActionCommand("Cancel");
+        newAction.setActionCommand("newAuction");
+        raiseBid.setActionCommand("raiseBid");
 
-        okButton.addActionListener(new ButtonClickListener());
-        submitButton.addActionListener(new ButtonClickListener());
-        //cancelButton.addActionListener(new ButtonClickListener());
+        newAction.addActionListener(new ButtonClickListener());
+        raiseBid.addActionListener(new ButtonClickListener());
 
-        controlPanel.add(okButton);
-        controlPanel.add(submitButton);
-        //controlPanel.add(cancelButton);
+        //controlPanel.setBackground(Color.red);
 
         mainFrame.setVisible(true);
+        mainFrame.pack();
+    }
+
+    public void addAuction(Auction a){
+        System.out.println("Add new auction to auctionPanel");
+        auctionList.add(a);
+        JPanel p  = new JPanel();
+        p.setLayout(new GridLayout(4,3,5,5));
+        //p.setBackground(Color.cyan);
+
+        //CREATE THE PRICE LABEL
+        JLabel priceLabel = new JLabel(" Price : ");
+        JLabel auctionPriceLabel = new JLabel("");
+        auctionPriceLabel.setText(Integer.toString(a.getPrice()));
+        auctionPriceLabel.setLabelFor(priceLabel);
+        p.add(priceLabel);
+        p.add(auctionPriceLabel);
+
+        //CREATE THE BID FIELD
+        JTextField raiseBid = new JTextField("",JLabel.TRAILING);
+        JLabel raiseLabel = new JLabel("Bid : ");
+        raiseLabel.setLabelFor(raiseBid);
+        p.add(raiseLabel);
+        p.add(raiseBid);
+        p.setBorder(BorderFactory.createTitledBorder(a.getName()));
+
+
+        JButton raiseBidbutton = new JButton("Raise the bid");
+                raiseBidbutton.setActionCommand("raiseBid");
+        p.add(raiseBidbutton,4);
+
+        auctionListPanel.put(a.getName(),p);
+
+        auctionPanel.add(auctionListPanel.get(a.getName()));
     }
 
     private class ButtonClickListener implements ActionListener {
@@ -81,7 +150,12 @@ public class ClientGui {
     }
 
     public static void main(String[] args){
+        Auction a = new Auction(10,"Noix de coco x10");
+
         ClientGui c = new ClientGui();
-        c.prepareView();
+
+        c.addAuction(a);
+
+
     }
 }
