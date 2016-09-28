@@ -7,6 +7,20 @@
     <groupId>pay2bid</groupId>
     <artifactId>pay2bid</artifactId>
     <version>1.0-SNAPSHOT</version>
+    <dependencies>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>RELEASE</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+    <dependency>
+        <groupId>junit</groupId>
+        <artifactId>junit</artifactId>
+        <version>4.12</version>
+    </dependency>
 
     <build>
         <plugins>
@@ -21,6 +35,4 @@
             </plugin>
         </plugins>
     </build>
-
-
 </project>

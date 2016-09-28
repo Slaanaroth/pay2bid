@@ -8,7 +8,8 @@ import java.rmi.server.UnicastRemoteObject;
 import java.util.logging.Logger;
 
 /**
- * Created by E122371M on 27/09/16.
+ * @author Thomas Minier
+ * @date 27/09/16
  */
 public class Client extends UnicastRemoteObject implements IClient {
 
@@ -20,7 +21,7 @@ public class Client extends UnicastRemoteObject implements IClient {
     }
 
     public void submit(Auction auction) throws RemoteException {
-
+        server.place_auction(auction);
     }
 
     public void bid_sold(IClient buyer) throws RemoteException {
