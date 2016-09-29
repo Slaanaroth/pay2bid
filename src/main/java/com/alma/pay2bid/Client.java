@@ -21,14 +21,14 @@ public class Client extends UnicastRemoteObject implements IClient {
     }
 
     public void submit(Auction auction) throws RemoteException {
-        server.place_auction(auction);
+        server.placeAuction(auction);
     }
 
-    public void bid_sold(IClient buyer) throws RemoteException {
+    public void bidSold(IClient buyer) throws RemoteException {
 
     }
 
-    public void new_price(int price) throws RemoteException {
+    public void newPrice(int price) throws RemoteException {
 
     }
 }

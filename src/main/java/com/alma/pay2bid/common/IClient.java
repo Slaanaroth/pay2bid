@@ -10,6 +10,6 @@ import java.rmi.RemoteException;
  */
 public interface IClient extends Remote {
     void submit(Auction auction) throws RemoteException;
-    void bid_sold(IClient buyer) throws RemoteException;
-    void new_price(int price) throws RemoteException;
+    void bidSold(IClient buyer) throws RemoteException;
+    void newPrice(int price) throws RemoteException;
 }

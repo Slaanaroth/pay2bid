@@ -19,6 +19,8 @@ public class Server extends UnicastRemoteObject implements IServer {
 
     private static final Logger LOGGER = Logger.getLogger("com.alma.pay2bid.Server.logger");
     private Auction currentAuction;
+    private IClient winner;
+    private int nbParticipants = 0;
     private List<IClient> clients = new ArrayList<>();
     private Queue<Auction> auctions = new ConcurrentLinkedQueue<>();
 
@@ -26,7 +28,7 @@ public class Server extends UnicastRemoteObject implements IServer {
 
     }
 
-    public void place_auction(Auction auction) throws RemoteException {
+    public void placeAuction(Auction auction) throws RemoteException {
         auctions.add(auction);
     }
 
@@ -43,17 +45,30 @@ public class Server extends UnicastRemoteObject implements IServer {
         notifyAll();
     }
 
-    public void raise_bid(IClient client, int new_bid) throws RemoteException {
-        // TODO see if this method need to be synchronized
+    public void raiseBid(IClient client, int newBid) throws RemoteException {
+        // TODO : see if this method need to be synchronized
         int currentPrice = auctions.element().getPrice();
-        auctions.element().setPrice(currentPrice + new_bid);
+        auctions.element().setPrice(currentPrice + newBid);
+        winner = client;
     }
 
-    public void time_elapsed(IClient client) throws RemoteException {
-        // notify that the client's chrono is finished
-        // ...
+    public void timeElapsed(IClient client) throws RemoteException {
+        nbParticipants--;
 
-        // launch the next auction if they are no more clients in the previous one
-        // ...
+        // TODO : what if two clients reach this block when nbParticipants == 0 ? needs to synchronized ? 
+        if(nbParticipants == 0) {
+            // notify all the clients to show the winner
+            for(IClient c : clients) {
+                c.bidSold(winner);
+            }
+            // validate the registrations of clients in the monitor's queue
+            validateRegistrations();
+            nbParticipants = clients.size();
+            // TODO : if the queue is empty, wait for a new auction to be placed
+            // launch the next auction
+            currentAuction = auctions.poll();
+            // ...
+        }
+
     }
 }
