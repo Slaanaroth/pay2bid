@@ -8,7 +8,10 @@ import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Queue;
+import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.LinkedTransferQueue;
 import java.util.logging.Logger;
 
 /**
@@ -22,7 +25,7 @@ public class Server extends UnicastRemoteObject implements IServer {
     private IClient winner;
     private int nbParticipants = 0;
     private List<IClient> clients = new ArrayList<>();
-    private Queue<Auction> auctions = new ConcurrentLinkedQueue<>();
+    private BlockingQueue<Auction> auctions = new LinkedBlockingQueue<>();
 
     public Server() throws RemoteException {
 
@@ -45,17 +48,15 @@ public class Server extends UnicastRemoteObject implements IServer {
         notifyAll();
     }
 
-    public void raiseBid(IClient client, int newBid) throws RemoteException {
-        // TODO : see if this method need to be synchronized
+    public synchronized void raiseBid(IClient client, int newBid) throws RemoteException {
         int currentPrice = auctions.element().getPrice();
         auctions.element().setPrice(currentPrice + newBid);
         winner = client;
     }
 
-    public void timeElapsed(IClient client) throws RemoteException {
+    public synchronized void timeElapsed(IClient client) throws RemoteException, InterruptedException {
         nbParticipants--;
-
-        // TODO : what if two clients reach this block when nbParticipants == 0 ? needs to synchronized ? 
+        
         if(nbParticipants == 0) {
             // notify all the clients to show the winner
             for(IClient c : clients) {
@@ -66,9 +67,8 @@ public class Server extends UnicastRemoteObject implements IServer {
             nbParticipants = clients.size();
             // TODO : if the queue is empty, wait for a new auction to be placed
             // launch the next auction
-            currentAuction = auctions.poll();
+            currentAuction = auctions.take();
             // ...
         }
-
     }
 }

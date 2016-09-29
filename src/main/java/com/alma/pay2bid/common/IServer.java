@@ -12,5 +12,5 @@ public interface IServer extends Remote {
     void placeAuction(Auction auction) throws RemoteException;
     void register(IClient client) throws RemoteException;
     void raiseBid(IClient client, int newBid) throws RemoteException;
-    void timeElapsed(IClient client) throws RemoteException;
+    void timeElapsed(IClient client) throws RemoteException, InterruptedException;
 }
