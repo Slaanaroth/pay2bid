@@ -17,7 +17,7 @@ import java.util.logging.Logger;
  */
 public class Server extends UnicastRemoteObject implements IServer {
 
-    private static final Logger LOGGER = Logger.getLogger("com.alma.pay2bid.Server.logger");
+    private static final Logger LOGGER = Logger.getLogger(Server.class.getCanonicalName());
     private Auction currentAuction;
     private IClient winner;
     private int nbParticipants = 0;

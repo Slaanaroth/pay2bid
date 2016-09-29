@@ -13,7 +13,7 @@ import java.util.logging.Logger;
  */
 public class Client extends UnicastRemoteObject implements IClient {
 
-    private static final Logger LOGGER = Logger.getLogger("com.alma.pay2bid.Client.logger");
+    private static final Logger LOGGER = Logger.getLogger(Client.class.getCanonicalName());
     private IServer server;
 
     public Client(IServer server) throws RemoteException {
