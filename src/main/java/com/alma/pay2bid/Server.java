@@ -9,7 +9,6 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
-import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.logging.Logger;
 
 /**
@@ -42,33 +41,31 @@ public class Server extends UnicastRemoteObject implements IServer {
         LOGGER.info("Auction '" + currentAuction.getName() + "' launched !");
 
         // notify the client's that a new auction has begun
-        for(IClient client : clients) {
+        for (IClient client : clients) {
             client.newAuction(currentAuction);
         }
     }
 
     /**
-     *
      * @param auction
      * @throws RemoteException
      */
     @Override
     public synchronized void placeAuction(Auction auction) throws RemoteException {
         auctions.add(auction);
-        if(auctions.size() == 1) {
+        if (auctions.size() == 1) {
             launchAuction();
         }
     }
 
     /**
-     *
      * @param client
      * @throws RemoteException
      */
     @Override
     public synchronized void register(IClient client) throws RemoteException {
         try {
-            while(auctionInProgress) {
+            while (auctionInProgress) {
                 wait();
             }
             clients.add(client);
@@ -87,7 +84,6 @@ public class Server extends UnicastRemoteObject implements IServer {
     }
 
     /**
-     *
      * @param client
      * @param newBid
      * @throws RemoteException
@@ -102,13 +98,14 @@ public class Server extends UnicastRemoteObject implements IServer {
         LOGGER.info("New bid '" + currentPrice + "' placed by client " + client.toString());
 
         // transmit the new price to the clients
-        for(IClient c : clients) {
+        for (IClient c : clients) {
             c.newPrice(newPrice);
         }
+
+        //TODO: reamorcer chrono ?
     }
 
     /**
-     *
      * @param client
      * @throws RemoteException
      * @throws InterruptedException
@@ -116,9 +113,9 @@ public class Server extends UnicastRemoteObject implements IServer {
     @Override
     public synchronized void timeElapsed(IClient client) throws RemoteException, InterruptedException {
         nbParticipants--;
-        if(nbParticipants == 0) {
+        if (nbParticipants == 0) {
             // notify all the clients to show the winner
-            for(IClient c : clients) {
+            for (IClient c : clients) {
                 c.bidSold(winner);
             }
 
@@ -126,7 +123,7 @@ public class Server extends UnicastRemoteObject implements IServer {
             validateRegistrations();
 
             // launch the next auction if there is one available
-            if(!auctions.isEmpty()) {
+            if (!auctions.isEmpty()) {
                 launchAuction();
             }
         }

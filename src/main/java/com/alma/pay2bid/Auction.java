@@ -8,10 +8,12 @@ import java.io.Serializable;
 public class Auction implements Serializable {
     private int price;
     private String name;
+    private String description;
 
-    public Auction(int price, String name) {
+    public Auction(int price, String name, String description) {
         this.price = price;
         this.name = name;
+        this.description = description;
     }
 
     public int getPrice() {
@@ -28,5 +30,13 @@ public class Auction implements Serializable {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 }

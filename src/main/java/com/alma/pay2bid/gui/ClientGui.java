@@ -150,7 +150,7 @@ public class ClientGui {
     }
 
     public static void main(String[] args){
-        Auction a = new Auction(10,"Noix de coco x10");
+        Auction a = new Auction(10,"Noix de coco x10", "");
 
         ClientGui c = new ClientGui();
 

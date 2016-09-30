@@ -28,8 +28,8 @@ public class ServerTest {
 
     @org.junit.Test
     public void sample_test() throws Exception {
-        final IClient client = new Client(server);
-        final Auction auction = new Auction(10, "Blank auction");
+        final IClient client = new Client(server, "client0");
+        final Auction auction = new Auction(10, "Blank auction", "");
 
         class concurrentTask extends Thread {
             public void run() {
