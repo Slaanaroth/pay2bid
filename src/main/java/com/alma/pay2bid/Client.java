@@ -98,13 +98,18 @@ public class Client extends UnicastRemoteObject implements IClient {
      * @throws RemoteException
      */
     public void newPrice(int price) throws RemoteException {
-        /*if(currentAuction == null || timer == null) {
+        /*if(currentAuction == null) {
             throw new Exception();
         }*/
 
         LOGGER.info("");
 
         currentAuction.setPrice(price);
+
+        if(timer != null) {
+            timer.cancel();
+            timer = null;
+        }
 
         timer = new Timer();
         timer.schedule(new TimerManager(), TIME_TO_RAISE_BID);

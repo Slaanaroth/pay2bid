@@ -101,8 +101,6 @@ public class Server extends UnicastRemoteObject implements IServer {
         for (IClient c : clients) {
             c.newPrice(newPrice);
         }
-
-        //TODO: reamorcer chrono ?
     }
 
     /**
