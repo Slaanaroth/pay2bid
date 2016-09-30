@@ -1,9 +1,11 @@
 package com.alma.pay2bid;
 
+import java.io.Serializable;
+
 /**
  * Created by E122371M on 27/09/16.
  */
-public class Auction {
+public class Auction implements Serializable {
     private int price;
     private String name;
 

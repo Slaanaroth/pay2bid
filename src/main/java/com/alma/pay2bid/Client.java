@@ -20,7 +20,12 @@ public class Client extends UnicastRemoteObject implements IClient {
         this.server = server;
     }
 
+    public void newAuction(Auction auction) throws RemoteException {
+
+    }
+
     public void submit(Auction auction) throws RemoteException {
+        LOGGER.info("Auction " + auction.getName() + " transmitted to server");
         server.placeAuction(auction);
     }
 
