@@ -6,6 +6,7 @@ import com.alma.pay2bid.common.IServer;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
@@ -23,8 +24,8 @@ public class Server extends UnicastRemoteObject implements IServer {
     private Auction currentAuction;
     private IClient winner;
     private int nbParticipants = 0;
-    private List<IClient> clients = new ArrayList<>();
-    private Queue<Auction> auctions = new ConcurrentLinkedQueue<>();
+    private List<IClient> clients = new ArrayList<IClient>();
+    private Queue<Auction> auctions = new LinkedList<Auction>();
 
     public Server() throws RemoteException {
 

@@ -28,24 +28,28 @@ public class ServerTest {
 
     @org.junit.Test
     public void sample_test() throws Exception {
-        IClient client = new Client(server);
-        Auction auction = new Auction(10, "Blank auction");
+        final IClient client = new Client(server);
+        final Auction auction = new Auction(10, "Blank auction");
 
         class concurrentTask extends Thread {
             public void run() {
                 try {
                     server.register(client);
                     client.submit(auction);
+                    Thread.sleep(5000L);
                     server.raiseBid(client, 20);
                     server.timeElapsed(client);
-                } catch (RemoteException | InterruptedException e) {
+                } catch (RemoteException e) {
+                    e.printStackTrace();
+                } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
+
             }
         }
 
         new concurrentTask().start();
-        Thread.sleep(5000);
+        Thread.sleep(2000L);
         server.register(client);
     }
 
