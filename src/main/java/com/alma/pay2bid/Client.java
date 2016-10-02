@@ -36,12 +36,14 @@ public class Client extends UnicastRemoteObject implements IClient {
     private Timer timer;
     private Auction currentAuction;
     private String name;
+    private ClientState state;
 
     public Client(IServer server, String name) throws RemoteException {
         LOGGER.info("");
 
         this.server = server;
         this.name = name;
+        state = ClientState.WAITING;
     }
 
     /**
@@ -59,6 +61,8 @@ public class Client extends UnicastRemoteObject implements IClient {
 
         timer = new Timer();
         timer.schedule(new TimerManager(), TIME_TO_RAISE_BID);
+
+        state = ClientState.WAITING;
     }
 
     /**
@@ -91,6 +95,8 @@ public class Client extends UnicastRemoteObject implements IClient {
 
         timer.cancel();
         timer = null;
+
+        state = ClientState.ENDING;
     }
 
     /**
@@ -113,6 +119,8 @@ public class Client extends UnicastRemoteObject implements IClient {
 
         timer = new Timer();
         timer.schedule(new TimerManager(), TIME_TO_RAISE_BID);
+
+        state = ClientState.WAITING;
     }
 
     public String getName() throws RemoteException {
