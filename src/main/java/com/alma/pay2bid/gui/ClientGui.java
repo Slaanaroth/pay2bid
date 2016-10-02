@@ -15,41 +15,56 @@ import java.util.HashMap;
  * Created by Folkvir(Grall Arnaud)) on 28/09/16.
  */
 public class ClientGui {
+    /**
+     * MAIN FRAME
+     */
     private JFrame mainFrame;
-
     private JMenuBar menuBar;
-
     private JLabel headerLabel;
     private JLabel statusLabel;
-
     private JPanel controlPanel;
     private JPanel mainPanel;
     private JPanel auctionPanel;
-
+    private JScrollPane scrollPane;
     private JButton newAction;
     private JButton raiseBid;
 
-    private ArrayList<Auction> auctionList;
+    /**
+     * NEW AUCTION FRAME
+     */
+    private JFrame auctionFrame;
 
-    private HashMap<String,JPanel> auctionListPanel;
+    /**
+     * DATA
+     */
+    private HashMap<String,AuctionGui> auctionList;
+
+
     /**
      * Constructor
      */
     public ClientGui(){
-        auctionList = new ArrayList<Auction>();
-        auctionListPanel = new HashMap<String,JPanel>();
+        auctionList = new HashMap<String,AuctionGui>();
         createGui();
     }
 
+    /**
+     * CREATE THE ENTIRE GUI
+     */
     private void createGui(){
         mainFrame = new JFrame("Pay2Bid - Auction");
+        Dimension d = new Dimension(500,500);
         mainFrame.setSize(500,500);
+        mainFrame.setMaximumSize(d);
         mainFrame.setLayout(new BorderLayout());
 
 
         menuBar = new JMenuBar();
         JMenu menu = new JMenu("Options");
-        menu.add(new JMenuItem("New Auction"));
+        JMenuItem newAuction = new JMenuItem("New Auction");
+        newAuction.setActionCommand("newAuction");
+        newAuction.addActionListener(new MenuNewAuctionActionListener());
+        menu.add(newAuction);
         menuBar.add(menu);
 
         headerLabel = new JLabel("",JLabel.CENTER );
@@ -66,77 +81,84 @@ public class ClientGui {
 
         mainPanel = new JPanel();
         mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
-
-        controlPanel = new JPanel();
-        controlPanel.setLayout(new FlowLayout());
-
+        //controlPanel = new JPanel();
+        //controlPanel.setLayout(new FlowLayout());
         auctionPanel = new JPanel();
         auctionPanel.setLayout(new BoxLayout(auctionPanel, BoxLayout.Y_AXIS));
-
-
         mainPanel.add(auctionPanel);
-        mainPanel.add(controlPanel);
+        mainPanel.setMaximumSize(d);
+        scrollPane = new JScrollPane(mainPanel);
 
-        mainFrame.add(headerLabel,BorderLayout.PAGE_START);
-        mainFrame.add(mainPanel,BorderLayout.CENTER);
-        mainFrame.add(statusLabel,BorderLayout.PAGE_END);
+
+        headerLabel.setText("Current Auction");
 
         mainFrame.setJMenuBar(menuBar);
 
-        mainFrame.setVisible(true);
+        mainFrame.add(headerLabel,BorderLayout.PAGE_START);
+        mainFrame.add(scrollPane,BorderLayout.CENTER);
+        statusLabel.setBackground(Color.red);
+        mainFrame.add(statusLabel,BorderLayout.PAGE_END);
     }
 
+    /**
+     * LOAD THE CLIENT GUI
+     */
     private void prepareView(){
-        headerLabel.setText("Current Auction");
-
-        newAction = new JButton("New Action");
-        raiseBid = new JButton("Raise the Bid");
-
-        newAction.setActionCommand("newAuction");
-        raiseBid.setActionCommand("raiseBid");
-
-        newAction.addActionListener(new ButtonClickListener());
-        raiseBid.addActionListener(new ButtonClickListener());
-
-        //controlPanel.setBackground(Color.red);
-
         mainFrame.setVisible(true);
-        mainFrame.pack();
     }
 
-    public void addAuction(Auction a){
+    /**
+     * ADD A NEW AUCTION TO THE MAIN FRAME
+     * @param a
+     */
+    public void addAuctionPanel(Auction a){
         System.out.println("Add new auction to auctionPanel");
-        auctionList.add(a);
-        JPanel p  = new JPanel();
-        p.setLayout(new GridLayout(4,3,5,5));
-        //p.setBackground(Color.cyan);
 
-        //CREATE THE PRICE LABEL
-        JLabel priceLabel = new JLabel(" Price : ");
-        JLabel auctionPriceLabel = new JLabel("");
-        auctionPriceLabel.setText(Integer.toString(a.getPrice()));
-        auctionPriceLabel.setLabelFor(priceLabel);
-        p.add(priceLabel);
-        p.add(auctionPriceLabel);
-
-        //CREATE THE BID FIELD
-        JTextField raiseBid = new JTextField("",JLabel.TRAILING);
-        JLabel raiseLabel = new JLabel("Bid : ");
-        raiseLabel.setLabelFor(raiseBid);
-        p.add(raiseLabel);
-        p.add(raiseBid);
-        p.setBorder(BorderFactory.createTitledBorder(a.getName()));
-
+        AuctionGui auction = new AuctionGui(a);
 
         JButton raiseBidbutton = new JButton("Raise the bid");
-                raiseBidbutton.setActionCommand("raiseBid");
-        p.add(raiseBidbutton,4);
+        raiseBidbutton.setActionCommand("raiseBid");
+        raiseBidbutton.addActionListener(new ButtonClickListener());
+        auction.auctionPanel.add(raiseBidbutton, 4);
 
-        auctionListPanel.put(a.getName(),p);
+        auctionList.put(a.getName(), auction);
+        auctionPanel.add(auctionList.get(a.getName()).auctionPanel);
 
-        auctionPanel.add(auctionListPanel.get(a.getName()));
+        mainPanel.revalidate();
+        mainPanel.repaint();
     }
 
+
+
+    /**
+     * SET A NEW PRICE FOR THE PROVIDED AUCTION
+     */
+    private void setAuctionPrice(Auction a){
+        System.out.println("auctionPrice set !");
+        //UPDATE AUCTION IN OUR LIST
+        auctionList.get(a.getName()).setProperties(a);
+
+        //RELOAD THE MAIN PANEL
+        auctionList.get(a.getName()).auctionPanel.revalidate();
+        auctionList.get(a.getName()).auctionPanel.repaint();
+
+        mainPanel.revalidate();
+        mainPanel.repaint();
+    }
+
+    /**
+     * CREATE A NEW AUCTION FRAME IN ORDER TO SEND IT TO THE SERVER
+     */
+    private void newAuctionView(){
+        auctionFrame = new JFrame("Add a new auction");
+        auctionFrame.setLayout(new BorderLayout());
+
+
+    }
+
+    /**
+     * ACTION LISTENER FOR BUTTON
+     */
     private class ButtonClickListener implements ActionListener {
         public void actionPerformed(ActionEvent e) {
             String command = e.getActionCommand();
@@ -149,13 +171,37 @@ public class ClientGui {
         }
     }
 
+    /**
+     * TEST ACTION LISTENER FOR NEW AUCTION
+     */
+    private class MenuNewAuctionActionListener implements ActionListener {
+        public void actionPerformed(ActionEvent e) {
+            String command = e.getActionCommand();
+            if( command.equals( "newAuction" ))  {
+                statusLabel.setText("New Auction sent.");
+                Auction a = new Auction(10,"Noix de coco x10", "");
+
+                //TEST DE LA FONCTION SETAUCTIONPRICE
+                addAuctionPanel(a);
+                a.setPrice(50);
+                System.out.println(a.getPrice());
+                setAuctionPrice(a);
+            }
+        }
+    }
+
+    /**
+     * MAIN FUNCTION TO RUN THE CLIENT
+     * @param args
+     */
     public static void main(String[] args){
         Auction a = new Auction(10,"Noix de coco x10", "");
 
         ClientGui c = new ClientGui();
 
-        c.addAuction(a);
+        c.prepareView();
 
+        c.addAuctionPanel(a);
 
     }
 }
