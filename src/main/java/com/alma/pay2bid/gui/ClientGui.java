@@ -8,7 +8,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
@@ -150,10 +149,39 @@ public class ClientGui {
      * CREATE A NEW AUCTION FRAME IN ORDER TO SEND IT TO THE SERVER
      */
     private void newAuctionView(){
+
         auctionFrame = new JFrame("Add a new auction");
         auctionFrame.setLayout(new BorderLayout());
+        auctionFrame.setSize(new Dimension(500,200));
+        auctionFrame.setResizable(false);
 
+        Auction a = new Auction(0,"","");
+        AuctionGui auction = new AuctionGui(a);
 
+        auctionFrame.add(auction.newAuctionPanel, BorderLayout.CENTER);
+
+        JButton auctionSend = new JButton("SEND NEW AUCTION");
+        auctionSend.setActionCommand("newAuction");
+        auctionSend.addActionListener(new AuctionGuiListener(auction,this));
+        auction.newAuctionPanel.add(auctionSend);
+
+        auctionFrame.add(auction.statusAuction,BorderLayout.PAGE_END);
+
+        auctionFrame.setVisible(true);
+    }
+
+    public void sendAuction(AuctionGui auction) {
+        auctionFrame.setVisible(false);
+        auctionFrame = null;
+
+        System.out.println("New auction send to the server : [...]");
+        System.out.println("Name : "+auction.name.getText());
+        System.out.println("Price : "+auction.price.getText());
+        System.out.println("Description : "+auction.description.getText());
+
+        //SEND HERE TO TE SERVER ....
+
+        statusLabel.setText("New auction sent...");
     }
 
     /**
@@ -178,14 +206,20 @@ public class ClientGui {
         public void actionPerformed(ActionEvent e) {
             String command = e.getActionCommand();
             if( command.equals( "newAuction" ))  {
-                statusLabel.setText("New Auction sent.");
+                if(auctionFrame == null){
+                    newAuctionView();
+                }
+
+
+                /*statusLabel.setText("New Auction sent.");
+
                 Auction a = new Auction(10,"Noix de coco x10", "");
 
                 //TEST DE LA FONCTION SETAUCTIONPRICE
                 addAuctionPanel(a);
                 a.setPrice(50);
                 System.out.println(a.getPrice());
-                setAuctionPrice(a);
+                setAuctionPrice(a);*/
             }
         }
     }

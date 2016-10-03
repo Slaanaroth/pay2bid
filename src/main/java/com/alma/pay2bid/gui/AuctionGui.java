@@ -10,11 +10,27 @@ import java.awt.*;
  */
 public class AuctionGui {
     Auction auction;
+
+    /**
+     * PROPERTIES FOR MAIN PANEL
+     */
     JPanel auctionPanel;
     JLabel auctionPrice;
     JLabel auctionPriceLabel;
     JTextField auctionBid;
     JLabel auctionBidLabel;
+
+    /**
+     * PROPERTIES FOR NEW AUCTION FRAME
+     */
+    JPanel newAuctionPanel;
+    JLabel nameLabel;
+    JTextField  name;
+    JLabel priceLabel;
+    JTextField  price;
+    JLabel descriptionLabel;
+    JTextField  description;
+    JLabel statusAuction;
 
     public AuctionGui(Auction a){
         auction = a;
@@ -39,6 +55,32 @@ public class AuctionGui {
         auctionPanel.add(auctionBidLabel);
         auctionPanel.add(auctionBid);
         auctionPanel.setBorder(BorderFactory.createTitledBorder(a.getName()));
+
+        newAuctionPanel = new JPanel();
+        newAuctionPanel.setLayout(new GridLayout(4,3,5,5));
+
+        nameLabel = new JLabel("Name : ");
+        name = new JTextField();
+        nameLabel.setLabelFor(name);
+
+        priceLabel = new JLabel("Price : ");
+        price = new JTextField();
+        priceLabel.setLabelFor(price);
+
+        descriptionLabel = new JLabel("Description : ");
+        description = new JTextField();
+        descriptionLabel.setLabelFor(description);
+
+        statusAuction = new JLabel("",JLabel.CENTER);
+
+        newAuctionPanel.add(nameLabel);
+        newAuctionPanel.add(name);
+
+        newAuctionPanel.add(priceLabel);
+        newAuctionPanel.add(price);
+
+        newAuctionPanel.add(descriptionLabel);
+        newAuctionPanel.add(description);
     }
 
     public void  setProperties(Auction a){
