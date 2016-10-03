@@ -1,6 +1,9 @@
 package com.alma.pay2bid.common;
 
 import com.alma.pay2bid.Auction;
+import com.alma.pay2bid.gui.observers.BidSoldObserver;
+import com.alma.pay2bid.gui.observers.NewAuctionObserver;
+import com.alma.pay2bid.gui.observers.NewPriceObserver;
 
 import java.rmi.Remote;
 import java.rmi.RemoteException;
@@ -18,4 +21,10 @@ public interface IClient extends Remote {
     void newPrice(int price) throws RemoteException;
 
     String getName() throws RemoteException;
+
+    void registerBidSoldObserver(BidSoldObserver observer) throws RemoteException;
+
+    void registerNewAuctionObserver(NewAuctionObserver observer) throws RemoteException;
+
+    void registerNewPriceObserver(NewPriceObserver observer) throws RemoteException;
 }

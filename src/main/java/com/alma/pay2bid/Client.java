@@ -2,9 +2,14 @@ package com.alma.pay2bid;
 
 import com.alma.pay2bid.common.IClient;
 import com.alma.pay2bid.common.IServer;
+import com.alma.pay2bid.gui.observers.BidSoldObserver;
+import com.alma.pay2bid.gui.observers.NewAuctionObserver;
+import com.alma.pay2bid.gui.observers.NewPriceObserver;
 
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.logging.Logger;
@@ -15,7 +20,7 @@ import java.util.logging.Logger;
  */
 public class Client extends UnicastRemoteObject implements IClient {
 
-    class TimerManager extends TimerTask {
+    private class TimerManager extends TimerTask {
         @Override
         public void run() {
             try {
@@ -38,9 +43,12 @@ public class Client extends UnicastRemoteObject implements IClient {
     private String name;
     private ClientState state;
 
-    public Client(IServer server, String name) throws RemoteException {
-        LOGGER.info("");
+    // collections of observers used to connect the client to the GUI
+    private List<BidSoldObserver> bidSoldObservers = new ArrayList<BidSoldObserver>();
+    private List<NewAuctionObserver> newAuctionObservers = new ArrayList<NewAuctionObserver>();
+    private List<NewPriceObserver> newPriceObservers = new ArrayList<NewPriceObserver>();
 
+    public Client(IServer server, String name) throws RemoteException {
         this.server = server;
         this.name = name;
         state = ClientState.WAITING;
@@ -50,12 +58,13 @@ public class Client extends UnicastRemoteObject implements IClient {
      * @param auction
      * @throws RemoteException
      */
+    @Override
     public void newAuction(Auction auction) throws RemoteException {
         /*if(auction == null) {
             throw new Exception();
         }*/
 
-        LOGGER.info("");
+        LOGGER.info("New auction received from the server");
 
         currentAuction = auction;
 
@@ -63,6 +72,11 @@ public class Client extends UnicastRemoteObject implements IClient {
         timer.schedule(new TimerManager(), TIME_TO_RAISE_BID);
 
         state = ClientState.WAITING;
+
+        // notify the observers of the new auction
+        for (NewAuctionObserver observer : newAuctionObservers) {
+            observer.execute(auction);
+        }
     }
 
     /**
@@ -75,7 +89,7 @@ public class Client extends UnicastRemoteObject implements IClient {
             throw new Exception();
         }*/
 
-        LOGGER.info("");
+        LOGGER.info("New auction submitted to the server");
 
         server.placeAuction(auction);
     }
@@ -84,6 +98,7 @@ public class Client extends UnicastRemoteObject implements IClient {
      * @param buyer
      * @throws RemoteException
      */
+    @Override
     public void bidSold(IClient buyer) throws RemoteException {
         /*if(currentAuction == null) {
             throw new Exception();
@@ -97,18 +112,24 @@ public class Client extends UnicastRemoteObject implements IClient {
         timer = null;
 
         state = ClientState.ENDING;
+
+        // notify the observers of the new bid
+        for (BidSoldObserver observer : bidSoldObservers) {
+            observer.execute(buyer);
+        }
     }
 
     /**
      * @param price
      * @throws RemoteException
      */
+    @Override
     public void newPrice(int price) throws RemoteException {
         /*if(currentAuction == null) {
             throw new Exception();
         }*/
 
-        LOGGER.info("");
+        LOGGER.info("New price received for the current auction");
 
         currentAuction.setPrice(price);
 
@@ -121,9 +142,50 @@ public class Client extends UnicastRemoteObject implements IClient {
         timer.schedule(new TimerManager(), TIME_TO_RAISE_BID);
 
         state = ClientState.WAITING;
+
+        // notify the observers of the new price for the current auction
+        for (NewPriceObserver observer : newPriceObservers) {
+            observer.execute(price);
+        }
     }
 
+    /**
+     *
+     * @return
+     * @throws RemoteException
+     */
+    @Override
     public String getName() throws RemoteException {
         return name;
+    }
+
+    /**
+     *
+     * @param observer
+     * @throws RemoteException
+     */
+    @Override
+    public void registerBidSoldObserver(BidSoldObserver observer) throws RemoteException {
+        bidSoldObservers.add(observer);
+    }
+
+    /**
+     *
+     * @param observer
+     * @throws RemoteException
+     */
+    @Override
+    public void registerNewAuctionObserver(NewAuctionObserver observer) throws RemoteException {
+        newAuctionObservers.add(observer);
+    }
+
+    /**
+     *
+     * @param observer
+     * @throws RemoteException
+     */
+    @Override
+    public void registerNewPriceObserver(NewPriceObserver observer) throws RemoteException {
+        newPriceObservers.add(observer);
     }
 }
