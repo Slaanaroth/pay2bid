@@ -1,11 +1,12 @@
 package com.alma.pay2bid;
 
-import com.alma.pay2bid.common.IClient;
-import com.alma.pay2bid.common.IServer;
+import com.alma.pay2bid.bean.AuctionBean;
+import com.alma.pay2bid.client.Client;
+import com.alma.pay2bid.client.IClient;
+import com.alma.pay2bid.server.IServer;
+import com.alma.pay2bid.server.Server;
 
 import java.rmi.RemoteException;
-
-import static org.junit.Assert.*;
 
 /**
  * @author Thomas Minier
@@ -29,7 +30,7 @@ public class ServerTest {
     @org.junit.Test
     public void sample_test() throws Exception {
         final IClient client = new Client(server, "client0");
-        final Auction auction = new Auction(10, "Blank auction", "");
+        final AuctionBean auction = new AuctionBean(10, "Blank auction", "");
 
         class concurrentTask extends Thread {
             public void run() {

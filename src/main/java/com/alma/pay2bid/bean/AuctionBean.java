@@ -1,16 +1,14 @@
-package com.alma.pay2bid;
-
-import java.io.Serializable;
+package com.alma.pay2bid.bean;
 
 /**
- * Created by E122371M on 27/09/16.
+ *
  */
-public class Auction implements Serializable {
+public class AuctionBean implements IBean {
     private int price;
     private String name;
     private String description;
 
-    public Auction(int price, String name, String description) {
+    public AuctionBean(int price, String name, String description) {
         this.price = price;
         this.name = name;
         this.description = description;

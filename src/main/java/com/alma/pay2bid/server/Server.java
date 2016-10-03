@@ -1,7 +1,7 @@
-package com.alma.pay2bid;
+package com.alma.pay2bid.server;
 
-import com.alma.pay2bid.common.IClient;
-import com.alma.pay2bid.common.IServer;
+import com.alma.pay2bid.bean.AuctionBean;
+import com.alma.pay2bid.client.IClient;
 
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
@@ -20,11 +20,11 @@ public class Server extends UnicastRemoteObject implements IServer {
     private static final Logger LOGGER = Logger.getLogger(Server.class.getCanonicalName());
 
     private boolean auctionInProgress = false;
-    private Auction currentAuction;
+    private AuctionBean currentAuction;
     private IClient winner;
     private int nbParticipants = 0;
     private List<IClient> clients = new ArrayList<IClient>();
-    private Queue<Auction> auctions = new LinkedList<Auction>();
+    private Queue<AuctionBean> auctions = new LinkedList<AuctionBean>();
 
     public Server() throws RemoteException {
 
@@ -51,7 +51,7 @@ public class Server extends UnicastRemoteObject implements IServer {
      * @throws RemoteException
      */
     @Override
-    public synchronized void placeAuction(Auction auction) throws RemoteException {
+    public synchronized void placeAuction(AuctionBean auction) throws RemoteException {
         auctions.add(auction);
         if (auctions.size() == 1) {
             launchAuction();
