@@ -1,6 +1,6 @@
 package com.alma.pay2bid.gui;
 
-import com.alma.pay2bid.Auction;
+import com.alma.pay2bid.bean.AuctionBean;
 
 import javax.swing.*;
 import java.awt.*;
@@ -110,7 +110,7 @@ public class ClientGui {
      * ADD A NEW AUCTION TO THE MAIN FRAME
      * @param a
      */
-    public void addAuctionPanel(Auction a){
+    public void addAuctionPanel(AuctionBean a){
         System.out.println("Add new auction to auctionPanel");
 
         AuctionGui auction = new AuctionGui(a);
@@ -132,7 +132,7 @@ public class ClientGui {
     /**
      * SET A NEW PRICE FOR THE PROVIDED AUCTION
      */
-    private void setAuctionPrice(Auction a){
+    private void setAuctionPrice(AuctionBean a){
         System.out.println("auctionPrice set !");
         //UPDATE AUCTION IN OUR LIST
         auctionList.get(a.getName()).setProperties(a);
@@ -155,7 +155,7 @@ public class ClientGui {
         auctionFrame.setSize(new Dimension(500,200));
         auctionFrame.setResizable(false);
 
-        Auction a = new Auction(0,"","");
+        AuctionBean a = new AuctionBean(0,"","");
         AuctionGui auction = new AuctionGui(a);
 
         auctionFrame.add(auction.newAuctionPanel, BorderLayout.CENTER);
@@ -229,7 +229,7 @@ public class ClientGui {
      * @param args
      */
     public static void main(String[] args){
-        Auction a = new Auction(10,"Noix de coco x10", "");
+        AuctionBean a = new AuctionBean(10,"Noix de coco x10", "");
 
         ClientGui c = new ClientGui();
 

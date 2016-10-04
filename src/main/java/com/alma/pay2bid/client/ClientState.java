@@ -1,4 +1,4 @@
-package com.alma.pay2bid;
+package com.alma.pay2bid.client;
 
 /**
  *

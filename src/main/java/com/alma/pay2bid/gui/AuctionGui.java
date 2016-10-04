@@ -1,6 +1,6 @@
 package com.alma.pay2bid.gui;
 
-import com.alma.pay2bid.Auction;
+import com.alma.pay2bid.bean.AuctionBean;
 
 import javax.swing.*;
 import java.awt.*;
@@ -9,7 +9,7 @@ import java.awt.*;
  * Created by Folkvir on 02/10/2016.
  */
 public class AuctionGui {
-    Auction auction;
+    AuctionBean auction;
 
     /**
      * PROPERTIES FOR MAIN PANEL
@@ -32,7 +32,7 @@ public class AuctionGui {
     JTextField  description;
     JLabel statusAuction;
 
-    public AuctionGui(Auction a){
+    public AuctionGui(AuctionBean a){
         auction = a;
         auctionPanel  = new JPanel();
         auctionPanel.setMaximumSize(new Dimension(500, 150));
@@ -83,7 +83,7 @@ public class AuctionGui {
         newAuctionPanel.add(description);
     }
 
-    public void  setProperties(Auction a){
+    public void  setProperties(AuctionBean a){
         auctionPriceLabel.setText(String.valueOf(a.getPrice()));
     }
 }
