@@ -1,6 +1,10 @@
 package com.alma.pay2bid.gui;
 
 import com.alma.pay2bid.bean.AuctionBean;
+import com.alma.pay2bid.client.Client;
+import com.alma.pay2bid.client.observer.INewAuctionObserver;
+import com.alma.pay2bid.client.observer.IObserver;
+import com.alma.pay2bid.server.Server;
 
 import javax.swing.*;
 import java.awt.*;
@@ -8,12 +12,16 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.rmi.RemoteException;
 import java.util.HashMap;
 
 /**
  * Created by Folkvir(Grall Arnaud)) on 28/09/16.
  */
-public class ClientGui {
+public class ClientGui implements INewAuctionObserver{
+    private Client _client;
+
+
     /**
      * MAIN FRAME
      */
@@ -21,12 +29,10 @@ public class ClientGui {
     private JMenuBar menuBar;
     private JLabel headerLabel;
     private JLabel statusLabel;
-    private JPanel controlPanel;
     private JPanel mainPanel;
     private JPanel auctionPanel;
     private JScrollPane scrollPane;
-    private JButton newAction;
-    private JButton raiseBid;
+
 
     /**
      * NEW AUCTION FRAME
@@ -41,10 +47,29 @@ public class ClientGui {
 
     /**
      * Constructor
+     * @param client
      */
-    public ClientGui(){
+    public ClientGui(Client client) throws RemoteException, InterruptedException {
+        _client = client;
+
+        /**
+         * TODO A FUNCTION INTO THE CLIENT
+         */
+        client.getServer().register(_client);
+
+        client.addNewAuctionObserver(this);
         auctionList = new HashMap<String,AuctionGui>();
         createGui();
+    }
+
+    /**
+     * Action when the observer is notified
+     * @param auctionBean
+     */
+    @Override
+    public void updateNewAuction(AuctionBean auctionBean) {
+        System.out.println("It's updated !");
+        addAuctionPanel(auctionBean);
     }
 
     /**
@@ -111,20 +136,22 @@ public class ClientGui {
      * @param a
      */
     public void addAuctionPanel(AuctionBean a){
-        System.out.println("Add new auction to auctionPanel");
+        if(auctionList.get(a.getName()) == null) {
+            System.out.println("Add new auction to auctionPanel");
 
-        AuctionGui auction = new AuctionGui(a);
+            AuctionGui auction = new AuctionGui(a);
 
-        JButton raiseBidbutton = new JButton("Raise the bid");
-        raiseBidbutton.setActionCommand("raiseBid");
-        raiseBidbutton.addActionListener(new ButtonClickListener());
-        auction.auctionPanel.add(raiseBidbutton, 4);
+            JButton raiseBidbutton = new JButton("Raise the bid");
+            raiseBidbutton.setActionCommand("raiseBid");
+            raiseBidbutton.addActionListener(new ButtonClickListener());
+            auction.auctionPanel.add(raiseBidbutton, 4);
 
-        auctionList.put(a.getName(), auction);
-        auctionPanel.add(auctionList.get(a.getName()).auctionPanel);
+            auctionList.put(a.getName(), auction);
+            auctionPanel.add(auctionList.get(a.getName()).auctionPanel);
 
-        mainPanel.revalidate();
-        mainPanel.repaint();
+            mainPanel.revalidate();
+            mainPanel.repaint();
+        }
     }
 
 
@@ -170,7 +197,7 @@ public class ClientGui {
         auctionFrame.setVisible(true);
     }
 
-    public void sendAuction(AuctionGui auction) {
+    public void sendAuction(AuctionGui auction) throws RemoteException {
         auctionFrame.setVisible(false);
         auctionFrame = null;
 
@@ -178,11 +205,16 @@ public class ClientGui {
         System.out.println("Name : "+auction.name.getText());
         System.out.println("Price : "+auction.price.getText());
         System.out.println("Description : "+auction.description.getText());
-
+        AuctionBean a = new AuctionBean(Integer.parseInt(auction.price.getText()),auction.name.getText(),auction.description.getText());
         //SEND HERE TO TE SERVER ....
+
+        _client.submit(a);
+
 
         statusLabel.setText("New auction sent...");
     }
+
+
 
     /**
      * ACTION LISTENER FOR BUTTON
@@ -228,10 +260,13 @@ public class ClientGui {
      * MAIN FUNCTION TO RUN THE CLIENT
      * @param args
      */
-    public static void main(String[] args){
+    public static void main(String[] args) throws RemoteException, InterruptedException {
+        Server server = new Server();
+        Client client = new Client(server,"Arnaud");
+
         AuctionBean a = new AuctionBean(10,"Noix de coco x10", "");
 
-        ClientGui c = new ClientGui();
+        ClientGui c = new ClientGui(client);
 
         c.prepareView();
 

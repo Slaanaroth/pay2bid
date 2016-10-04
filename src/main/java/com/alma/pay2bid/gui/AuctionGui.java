@@ -1,6 +1,8 @@
 package com.alma.pay2bid.gui;
 
 import com.alma.pay2bid.bean.AuctionBean;
+import com.alma.pay2bid.client.observer.INewAuctionObserver;
+import com.alma.pay2bid.client.observer.IObserver;
 
 import javax.swing.*;
 import java.awt.*;
@@ -8,7 +10,7 @@ import java.awt.*;
 /**
  * Created by Folkvir on 02/10/2016.
  */
-public class AuctionGui {
+public class AuctionGui{
     AuctionBean auction;
 
     /**
@@ -86,4 +88,6 @@ public class AuctionGui {
     public void  setProperties(AuctionBean a){
         auctionPriceLabel.setText(String.valueOf(a.getPrice()));
     }
+
+
 }
