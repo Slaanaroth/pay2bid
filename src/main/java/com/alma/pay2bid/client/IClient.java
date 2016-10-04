@@ -41,40 +41,4 @@ public interface IClient extends Remote {
      * @throws RemoteException
      */
     String getName() throws RemoteException;
-
-    /**
-     * @param observer
-     * @throws RemoteException
-     */
-    void addBidSoldObserver(IBidSoldObserver observer) throws RemoteException;
-
-    /**
-     * @param observer
-     * @throws RemoteException
-     */
-    void addNewAuctionObserver(INewAuctionObserver observer) throws RemoteException;
-
-    /**
-     * @param observer
-     * @throws RemoteException
-     */
-    void addNewPriceObserver(INewPriceObserver observer) throws RemoteException;
-
-    /**
-     * @param observer
-     * @throws RemoteException
-     */
-    void removeBidSoldObserver(IBidSoldObserver observer) throws RemoteException;
-
-    /**
-     * @param observer
-     * @throws RemoteException
-     */
-    void removeNewAuctionObserver(INewAuctionObserver observer) throws RemoteException;
-
-    /**
-     * @param observer
-     * @throws RemoteException
-     */
-    void removeNewPriceObserver(INewPriceObserver observer) throws RemoteException;
 }

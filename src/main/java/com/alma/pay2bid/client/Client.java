@@ -1,6 +1,9 @@
 package com.alma.pay2bid.client;
 
 import com.alma.pay2bid.bean.AuctionBean;
+import com.alma.pay2bid.client.observable.IBidSoldObservable;
+import com.alma.pay2bid.client.observable.INewAuctionObservable;
+import com.alma.pay2bid.client.observable.INewPriceObservable;
 import com.alma.pay2bid.server.IServer;
 import com.alma.pay2bid.client.observer.IBidSoldObserver;
 import com.alma.pay2bid.client.observer.INewAuctionObserver;
@@ -15,7 +18,7 @@ import java.util.logging.Logger;
  * @author Thomas Minier
  * @date 27/09/16
  */
-public class Client extends UnicastRemoteObject implements IClient {
+public class Client extends UnicastRemoteObject implements IClient, IBidSoldObservable, INewAuctionObservable, INewPriceObservable {
 
     private class TimerManager extends TimerTask {
         @Override
@@ -72,7 +75,7 @@ public class Client extends UnicastRemoteObject implements IClient {
 
         // notify the observers of the new auction
         for (INewAuctionObserver observer : newAuctionObservers) {
-            observer.update(auction);
+            observer.updateNewAuction(auction);
         }
     }
 
@@ -112,7 +115,7 @@ public class Client extends UnicastRemoteObject implements IClient {
 
         // notify the observers of the new bid
         for (IBidSoldObserver observer : bidSoldObservers) {
-            observer.update(buyer);
+            observer.updateBidSold(buyer);
         }
     }
 
@@ -142,7 +145,7 @@ public class Client extends UnicastRemoteObject implements IClient {
 
         // notify the observers of the new price for the current auction
         for (INewPriceObserver observer : newPriceObservers) {
-            observer.update(price);
+            observer.updateNewPrice(price);
         }
     }
 
@@ -152,32 +155,32 @@ public class Client extends UnicastRemoteObject implements IClient {
     }
 
     @Override
-    public void addBidSoldObserver(IBidSoldObserver observer) throws RemoteException {
-        bidSoldObservers.add(observer);
+    public boolean addNewPriceObserver(INewPriceObserver observer) {
+        return newPriceObservers.add(observer);
     }
 
     @Override
-    public void addNewAuctionObserver(INewAuctionObserver observer) throws RemoteException {
-        newAuctionObservers.add(observer);
+    public boolean removeNewPriceObserver(INewPriceObserver observer) {
+        return newPriceObservers.remove(observer);
     }
 
     @Override
-    public void addNewPriceObserver(INewPriceObserver observer) throws RemoteException {
-        newPriceObservers.add(observer);
+    public boolean addBidSoldObserver(IBidSoldObserver observer) {
+        return bidSoldObservers.add(observer);
     }
 
     @Override
-    public void removeBidSoldObserver(IBidSoldObserver observer) throws RemoteException {
-        bidSoldObservers.remove(observer);
+    public boolean removeBidSoldObserver(IBidSoldObserver observer) {
+        return bidSoldObservers.remove(observer);
     }
 
     @Override
-    public void removeNewAuctionObserver(INewAuctionObserver observer) throws RemoteException {
-        newAuctionObservers.remove(observer);
+    public boolean addNewAuctionObserver(INewAuctionObserver observer) {
+        return newAuctionObservers.add(observer);
     }
 
     @Override
-    public void removeNewPriceObserver(INewPriceObserver observer) throws RemoteException {
-        newPriceObservers.remove(observer);
+    public boolean removeNewAuctionObserver(INewAuctionObserver observer) {
+        return newAuctionObservers.remove(observer);
     }
 }
