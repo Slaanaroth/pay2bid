@@ -53,7 +53,7 @@ public class Server extends UnicastRemoteObject implements IServer {
     @Override
     public synchronized void placeAuction(AuctionBean auction) throws RemoteException {
         auctions.add(auction);
-        if (auctions.size() == 1) {
+        if ( !auctionInProgress && (auctions.size() == 1)){
             launchAuction();
         }
     }

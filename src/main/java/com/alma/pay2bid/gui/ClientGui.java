@@ -18,7 +18,7 @@ import java.util.HashMap;
 /**
  * Created by Folkvir(Grall Arnaud)) on 28/09/16.
  */
-public class ClientGui implements INewAuctionObserver{
+public class ClientGui{
     private Client _client;
 
 
@@ -57,20 +57,17 @@ public class ClientGui implements INewAuctionObserver{
          */
         client.getServer().register(_client);
 
-        client.addNewAuctionObserver(this);
+        client.addNewAuctionObserver(new INewAuctionObserver() {
+            @Override
+            public void updateNewAuction(AuctionBean auction) {
+                System.out.println("It's updated !");
+                addAuctionPanel(auction);
+            }
+        });
         auctionList = new HashMap<String,AuctionGui>();
         createGui();
     }
 
-    /**
-     * Action when the observer is notified
-     * @param auctionBean
-     */
-    @Override
-    public void updateNewAuction(AuctionBean auctionBean) {
-        System.out.println("It's updated !");
-        addAuctionPanel(auctionBean);
-    }
 
     /**
      * CREATE THE ENTIRE GUI
