@@ -34,7 +34,7 @@ public interface IClient extends Remote {
      * @param price
      * @throws RemoteException
      */
-    void newPrice(int price) throws RemoteException;
+    void newPrice(int price,AuctionBean auction) throws RemoteException;
 
     /**
      * @return

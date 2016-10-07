@@ -99,7 +99,7 @@ public class Server extends UnicastRemoteObject implements IServer {
 
         // transmit the new price to the clients
         for (IClient c : clients) {
-            c.newPrice(newPrice);
+            c.newPrice(newPrice,currentAuction);
         }
     }
 

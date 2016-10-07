@@ -1,4 +1,7 @@
-package com.alma.pay2bid.gui;
+package com.alma.pay2bid.gui.listeners;
+
+import com.alma.pay2bid.gui.AuctionGui;
+import com.alma.pay2bid.gui.ClientGui;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -7,10 +10,10 @@ import java.awt.event.ActionListener;
  * Created by Folkvir on 02/10/2016.
  */
 public class AuctionGuiListener implements ActionListener{
-    AuctionGui auction;
-    ClientGui client;
+    private AuctionGui auction;
+    private ClientGui client;
 
-    AuctionGuiListener(AuctionGui a, ClientGui c){
+    public AuctionGuiListener(AuctionGui a, ClientGui c){
         this.auction = a;
         this.client = c;
     }

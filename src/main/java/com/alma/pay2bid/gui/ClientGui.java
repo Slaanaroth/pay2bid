@@ -3,6 +3,8 @@ package com.alma.pay2bid.gui;
 import com.alma.pay2bid.bean.AuctionBean;
 import com.alma.pay2bid.client.Client;
 import com.alma.pay2bid.client.observer.INewAuctionObserver;
+import com.alma.pay2bid.client.observer.INewPriceObserver;
+import com.alma.pay2bid.gui.listeners.AuctionGuiListener;
 import com.alma.pay2bid.gui.listeners.ButtonClickListener;
 import com.alma.pay2bid.server.Server;
 
@@ -145,6 +147,13 @@ public class ClientGui{
             auctionList.put(a.getName(), auction);
             auctionPanel.add(auctionList.get(a.getName()).auctionPanel);
             raiseBidbutton.addActionListener(new ButtonClickListener(this, auctionList.get(a.getName()), _client, _client.getServer()));
+            //Now add the observer to receive all price updates
+            _client.addNewPriceObserver(new INewPriceObserver() {
+                @Override
+                public void updateNewPrice(Integer price, AuctionBean auction) {
+                    setAuctionPrice(auction);
+                }
+            });
 
             mainPanel.revalidate();
             mainPanel.repaint();
@@ -249,10 +258,10 @@ public class ClientGui{
         //AuctionBean a = new AuctionBean(10,"Noix de coco x10", "");
 
         ClientGui c = new ClientGui(client);
-        //ClientGui c2 = new ClientGui(client2);
+        ClientGui c2 = new ClientGui(client2);
 
         c.prepareView();
-        //c2.prepareView();
+        c2.prepareView();
 
         //c.addAuctionPanel(a);
 

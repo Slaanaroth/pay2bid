@@ -29,10 +29,10 @@ public class AuctionGui{
     JLabel nameLabel;
     JTextField  name;
     JLabel priceLabel;
-    JTextField  price;
+    public JTextField  price;
     JLabel descriptionLabel;
     JTextField  description;
-    JLabel statusAuction;
+    public JLabel statusAuction;
 
     public AuctionGui(AuctionBean a){
         auction = a;
