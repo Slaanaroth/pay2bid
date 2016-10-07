@@ -3,7 +3,7 @@ package com.alma.pay2bid.gui;
 import com.alma.pay2bid.bean.AuctionBean;
 import com.alma.pay2bid.client.Client;
 import com.alma.pay2bid.client.observer.INewAuctionObserver;
-import com.alma.pay2bid.client.observer.IObserver;
+import com.alma.pay2bid.gui.listeners.ButtonClickListener;
 import com.alma.pay2bid.server.Server;
 
 import javax.swing.*;
@@ -140,11 +140,11 @@ public class ClientGui{
 
             JButton raiseBidbutton = new JButton("Raise the bid");
             raiseBidbutton.setActionCommand("raiseBid");
-            raiseBidbutton.addActionListener(new ButtonClickListener());
             auction.auctionPanel.add(raiseBidbutton, 4);
 
             auctionList.put(a.getName(), auction);
             auctionPanel.add(auctionList.get(a.getName()).auctionPanel);
+            raiseBidbutton.addActionListener(new ButtonClickListener(this, auctionList.get(a.getName()), _client, _client.getServer()));
 
             mainPanel.revalidate();
             mainPanel.repaint();
@@ -212,29 +212,13 @@ public class ClientGui{
     }
 
 
-
-    /**
-     * ACTION LISTENER FOR BUTTON
-     */
-    private class ButtonClickListener implements ActionListener {
-        public void actionPerformed(ActionEvent e) {
-            String command = e.getActionCommand();
-            if( command.equals( "newAuction" ))  {
-                statusLabel.setText("New Auction sent.");
-            }
-            else if( command.equals( "raiseBid" ) )  {
-                statusLabel.setText("New bid sent.");
-            }
-        }
-    }
-
     /**
      * TEST ACTION LISTENER FOR NEW AUCTION
      */
     private class MenuNewAuctionActionListener implements ActionListener {
         public void actionPerformed(ActionEvent e) {
             String command = e.getActionCommand();
-            if( command.equals( "newAuction" ))  {
+            if("newAuction".equals(command))  {
                 if(auctionFrame == null){
                     newAuctionView();
                 }
@@ -260,14 +244,21 @@ public class ClientGui{
     public static void main(String[] args) throws RemoteException, InterruptedException {
         Server server = new Server();
         Client client = new Client(server,"Arnaud");
+        Client client2 = new Client(server,"Arnaud");
 
-        AuctionBean a = new AuctionBean(10,"Noix de coco x10", "");
+        //AuctionBean a = new AuctionBean(10,"Noix de coco x10", "");
 
         ClientGui c = new ClientGui(client);
+        //ClientGui c2 = new ClientGui(client2);
 
         c.prepareView();
+        //c2.prepareView();
 
-        c.addAuctionPanel(a);
+        //c.addAuctionPanel(a);
 
+    }
+
+    public JLabel getStatusLabel() {
+        return statusLabel;
     }
 }

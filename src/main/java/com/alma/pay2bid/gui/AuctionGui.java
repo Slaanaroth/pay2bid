@@ -19,7 +19,7 @@ public class AuctionGui{
     JPanel auctionPanel;
     JLabel auctionPrice;
     JLabel auctionPriceLabel;
-    JTextField auctionBid;
+    public JTextField auctionBid;
     JLabel auctionBidLabel;
 
     /**

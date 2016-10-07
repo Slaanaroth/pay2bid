@@ -83,7 +83,7 @@ public class Client extends UnicastRemoteObject implements IClient, IBidSoldObse
      * @param auction
      * @throws RemoteException
      */
-    @Deprecated
+    @Override
     public void submit(AuctionBean auction) throws RemoteException {
         /*if (auction == null) {
             throw new Exception();
