@@ -48,6 +48,15 @@ public class Client extends UnicastRemoteObject implements IClient, IBidSoldObse
     private Collection<INewAuctionObserver> newAuctionObservers = new ArrayList<INewAuctionObserver>();
     private Collection<INewPriceObserver> newPriceObservers = new ArrayList<INewPriceObserver>();
 
+    /**
+     * To get a server reference:
+     * <pre>
+     *     IServer server = (IServer) LocateRegistry.getRegistry(host, port).lookup("Server");
+     * </pre>
+     * @param server
+     * @param name
+     * @throws RemoteException
+     */
     public Client(IServer server, String name) throws RemoteException {
         this.server = server;
         this.name = name;

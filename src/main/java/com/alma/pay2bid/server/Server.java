@@ -4,6 +4,8 @@ import com.alma.pay2bid.bean.AuctionBean;
 import com.alma.pay2bid.client.IClient;
 
 import java.rmi.RemoteException;
+import java.rmi.registry.LocateRegistry;
+import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -53,7 +55,7 @@ public class Server extends UnicastRemoteObject implements IServer {
     @Override
     public synchronized void placeAuction(AuctionBean auction) throws RemoteException {
         auctions.add(auction);
-        if ( !auctionInProgress && (auctions.size() == 1)){
+        if (!auctionInProgress && (auctions.size() == 1)) {
             launchAuction();
         }
     }
@@ -99,7 +101,7 @@ public class Server extends UnicastRemoteObject implements IServer {
 
         // transmit the new price to the clients
         for (IClient c : clients) {
-            c.newPrice(newPrice,currentAuction);
+            c.newPrice(newPrice, currentAuction);
         }
     }
 
@@ -124,6 +126,21 @@ public class Server extends UnicastRemoteObject implements IServer {
             if (!auctions.isEmpty()) {
                 launchAuction();
             }
+        }
+    }
+
+    public static void main(String[] args) {
+        if (System.getSecurityManager() == null) {
+            System.setSecurityManager(new SecurityManager());
+        }
+        try {
+            String name = "Server";
+            IServer server = new Server();
+            IServer stub = (IServer) UnicastRemoteObject.exportObject(server, 0);
+            Registry registry = LocateRegistry.getRegistry();
+            registry.rebind(name, stub);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 }
