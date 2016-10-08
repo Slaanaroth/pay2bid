@@ -1,8 +1,6 @@
 package com.alma.pay2bid.gui;
 
 import com.alma.pay2bid.bean.AuctionBean;
-import com.alma.pay2bid.client.observer.INewAuctionObserver;
-import com.alma.pay2bid.client.observer.IObserver;
 
 import javax.swing.*;
 import java.awt.*;
@@ -14,42 +12,42 @@ public class AuctionGui{
     AuctionBean auction;
 
     /**
-     * PROPERTIES FOR MAIN PANEL
+     * Properties for the main panel
      */
-    JPanel auctionPanel;
-    JLabel auctionPrice;
-    JLabel auctionPriceLabel;
-    public JTextField auctionBid;
-    JLabel auctionBidLabel;
+    private JPanel auctionPanel;
+    private JLabel auctionPriceLabel;
+    private JLabel auctionPriceValue;
+    private JTextField auctionBid;
+    private JLabel auctionBidLabel;
 
     /**
-     * PROPERTIES FOR NEW AUCTION FRAME
+     * Properties for the input's action frame
      */
-    JPanel newAuctionPanel;
-    JLabel nameLabel;
-    JTextField  name;
-    JLabel priceLabel;
+    private JPanel newAuctionPanel;
+    private JLabel nameLabel;
+    private JTextField  name;
+    private JLabel priceLabel;
     public JTextField  price;
-    JLabel descriptionLabel;
-    JTextField  description;
-    public JLabel statusAuction;
+    private JLabel descriptionLabel;
+    private JTextField  description;
+    private JLabel statusAuction;
 
     public AuctionGui(AuctionBean a){
         auction = a;
-        auctionPanel  = new JPanel();
+        auctionPanel = new JPanel();
         auctionPanel.setMaximumSize(new Dimension(500, 150));
         auctionPanel.setLayout(new GridLayout(4, 3, 5, 5));
         //p.setBackground(Color.cyan);
 
-        //CREATE THE PRICE LABEL
-        auctionPrice = new JLabel(" Price : ");
-        auctionPriceLabel = new JLabel("");
-        auctionPriceLabel.setText(Integer.toString(a.getPrice()));
-        auctionPriceLabel.setLabelFor(auctionPrice);
-        auctionPanel.add(auctionPrice);
+        // Create the price label
+        auctionPriceLabel = new JLabel(" Price : ");
+        auctionPriceValue = new JLabel("");
+        auctionPriceValue.setText(Integer.toString(a.getPrice()));
+        auctionPriceValue.setLabelFor(auctionPriceLabel);
         auctionPanel.add(auctionPriceLabel);
+        auctionPanel.add(auctionPriceValue);
 
-        //CREATE THE BID FIELD
+        // Create the bid field
         auctionBid = new JTextField("",JLabel.TRAILING);
         auctionBidLabel = new JLabel("Bid : ");
 
@@ -75,6 +73,7 @@ public class AuctionGui{
 
         statusAuction = new JLabel("",JLabel.CENTER);
 
+        // add all the elemnts to the panel
         newAuctionPanel.add(nameLabel);
         newAuctionPanel.add(name);
 
@@ -86,8 +85,30 @@ public class AuctionGui{
     }
 
     public void  setProperties(AuctionBean a){
-        auctionPriceLabel.setText(String.valueOf(a.getPrice()));
+        auctionPriceValue.setText(String.valueOf(a.getPrice()));
     }
 
+    public JTextField getAuctionBid() {
+        return auctionBid;
+    }
 
+    public JPanel getAuctionPanel() {
+        return auctionPanel;
+    }
+
+    public JTextField getName() {
+        return name;
+    }
+
+    public JPanel getNewAuctionPanel() {
+        return newAuctionPanel;
+    }
+
+    public JTextField getDescription() {
+        return description;
+    }
+
+    public JLabel getStatusAuction() {
+        return statusAuction;
+    }
 }

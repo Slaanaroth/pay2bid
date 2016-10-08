@@ -12,27 +12,28 @@ import java.rmi.RemoteException;
 /**
  * ACTION LISTENER FOR BUTTON
  */
-public class ButtonClickListener implements ActionListener {
+public class RaiseBidButtonListener implements ActionListener {
     private ClientGui gui;
     private AuctionGui auction;
     private IClient client;
     private IServer server;
 
-    public ButtonClickListener(ClientGui gui, AuctionGui auction, IClient client, IServer server) {
+    public RaiseBidButtonListener(ClientGui gui, AuctionGui auction, IClient client, IServer server) {
         this.gui = gui;
         this.auction = auction;
         this.client = client;
         this.server = server;
     }
 
-    public void actionPerformed(ActionEvent e) {
-        String command = e.getActionCommand();
+    @Override
+    public void actionPerformed(ActionEvent actionEvent) {
+        String command = actionEvent.getActionCommand();
         if("raiseBid".equals(command))  {
             gui.getStatusLabel().setText("New bid sent.");
             try {
-                server.raiseBid(client, Integer.valueOf(auction.auctionBid.getText()));
-            } catch (RemoteException e1) {
-                e1.printStackTrace();
+                server.raiseBid(client, Integer.valueOf(auction.getAuctionBid().getText()));
+            } catch (RemoteException e) {
+                e.printStackTrace();
             }
         }
     }
