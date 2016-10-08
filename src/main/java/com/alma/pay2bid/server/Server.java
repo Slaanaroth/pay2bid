@@ -29,7 +29,7 @@ public class Server extends UnicastRemoteObject implements IServer {
     private Queue<AuctionBean> auctions = new LinkedList<AuctionBean>();
 
     public Server() throws RemoteException {
-
+        super();
     }
 
     /**

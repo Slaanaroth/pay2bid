@@ -58,6 +58,8 @@ public class Client extends UnicastRemoteObject implements IClient, IBidSoldObse
      * @throws RemoteException
      */
     public Client(IServer server, String name) throws RemoteException {
+        super();
+
         this.server = server;
         this.name = name;
         state = ClientState.WAITING;
