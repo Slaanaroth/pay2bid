@@ -7,13 +7,16 @@ import com.alma.pay2bid.client.observer.INewPriceObserver;
 import com.alma.pay2bid.gui.listeners.SubmitAuctionListener;
 import com.alma.pay2bid.gui.listeners.RaiseBidButtonListener;
 import com.alma.pay2bid.gui.listeners.AuctionInputListener;
+import com.alma.pay2bid.server.IServer;
 import com.alma.pay2bid.server.Server;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
+import java.rmi.registry.LocateRegistry;
 import java.util.HashMap;
 import java.util.logging.Logger;
 
@@ -239,8 +242,9 @@ public class ClientGui {
      * Main loop which run the client
      * @param args
      */
-    public static void main(String[] args) throws RemoteException, InterruptedException {
-        Server server = new Server();
+    public static void main(String[] args) throws RemoteException, InterruptedException, NotBoundException {
+        //IServer server = new Server();
+        IServer server = (IServer) LocateRegistry.getRegistry("localhost", 1099).lookup("com.alma.pay2bid.server.Server"); //TODO: parameterize host/port
         Client client = new Client(server, "Arnaud");
         Client client2 = new Client(server, "Thomas");
 

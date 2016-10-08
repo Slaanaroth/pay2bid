@@ -5,13 +5,14 @@ import com.alma.pay2bid.client.observer.IBidSoldObserver;
 import com.alma.pay2bid.client.observer.INewAuctionObserver;
 import com.alma.pay2bid.client.observer.INewPriceObserver;
 
+import java.io.Serializable;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 
 /**
  *
  */
-public interface IClient extends Remote {
+public interface IClient extends Remote, Serializable {
     /**
      * @param auction
      * @throws RemoteException

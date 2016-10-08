@@ -130,15 +130,11 @@ public class Server extends UnicastRemoteObject implements IServer {
     }
 
     public static void main(String[] args) {
-        if (System.getSecurityManager() == null) {
-            System.setSecurityManager(new SecurityManager());
-        }
         try {
-            String name = "Server";
+            String name = "com.alma.pay2bid.server.Server";
             IServer server = new Server();
-            IServer stub = (IServer) UnicastRemoteObject.exportObject(server, 0);
-            Registry registry = LocateRegistry.getRegistry();
-            registry.rebind(name, stub);
+            Registry registry = LocateRegistry.createRegistry(1099); //TODO: parameterize port
+            registry.rebind(name, server);
         } catch (Exception e) {
             e.printStackTrace();
         }
