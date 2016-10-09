@@ -101,7 +101,7 @@ public class Server extends UnicastRemoteObject implements IServer {
 
         // transmit the new price to the clients
         for (IClient c : clients) {
-            c.newPrice(newPrice, currentAuction);
+            c.newPrice(currentAuction.getUUID(), newPrice);
         }
     }
 
@@ -133,8 +133,11 @@ public class Server extends UnicastRemoteObject implements IServer {
         try {
             String name = "com.alma.pay2bid.server.Server";
             IServer server = new Server();
-            Registry registry = LocateRegistry.createRegistry(1099); //TODO: parameterize port
+            //TODO: parameterize port
+            int port = 1099;
+            Registry registry = LocateRegistry.createRegistry(port);
             registry.rebind(name, server);
+            LOGGER.info("Server up and running at localhost on port " + port);
         } catch (Exception e) {
             e.printStackTrace();
         }

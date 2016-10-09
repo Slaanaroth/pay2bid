@@ -18,6 +18,7 @@ import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.util.HashMap;
+import java.util.UUID;
 import java.util.logging.Logger;
 
 import static java.lang.System.exit;
@@ -29,7 +30,7 @@ public class ClientGui {
 
     private static final Logger LOGGER = Logger.getLogger(ClientGui.class.getCanonicalName());
     private Client client;
-    private HashMap<String, AuctionGui> auctionList;
+    private HashMap<UUID, AuctionGui> auctionList;
 
     /**
      * Main frame & elements
@@ -48,11 +49,10 @@ public class ClientGui {
      * Constructor
      * @param client
      */
-    public ClientGui(Client client) throws RemoteException, InterruptedException {
+    public ClientGui(Client client, IServer server) throws RemoteException, InterruptedException {
         this.client = client;
-        auctionList = new HashMap<String,AuctionGui>();
-        // TODO : maybe find a more elegant way to do this (@Thomas)
-        client.getServer().register(this.client);
+        auctionList = new HashMap<UUID, AuctionGui>();
+        server.register(this.client);
 
         client.addNewAuctionObserver(new INewAuctionObserver() {
             @Override
@@ -61,6 +61,7 @@ public class ClientGui {
                 addAuctionPanel(auction);
             }
         });
+        // paint the GUI
         createGui();
     }
 
@@ -135,7 +136,7 @@ public class ClientGui {
      * @param auctionBean
      */
     private void addAuctionPanel(AuctionBean auctionBean){
-        if(auctionList.get(auctionBean.getName()) == null) {
+        if(!auctionList.containsKey(auctionBean.getUUID())) {
             LOGGER.info("Add new auction to auctionPanel");
 
             AuctionGui auction = new AuctionGui(auctionBean);
@@ -144,33 +145,37 @@ public class ClientGui {
             raiseBidButton.setActionCommand("raiseBid");
             auction.getAuctionPanel().add(raiseBidButton, 4);
 
-            auctionList.put(auctionBean.getName(), auction);
-            auctionPanel.add(auctionList.get(auctionBean.getName()).getAuctionPanel());
-            raiseBidButton.addActionListener(new RaiseBidButtonListener(this, auctionList.get(auctionBean.getName()), client, client.getServer()));
+            raiseBidButton.addActionListener(new RaiseBidButtonListener(client, client.getServer(), auction.getAuctionBid(), statusLabel));
             //Now add the observer to receive all price updates
             client.addNewPriceObserver(new INewPriceObserver() {
                 @Override
-                public void updateNewPrice(Integer price, AuctionBean auction) {
-                    setAuctionPrice(auction);
+                public void updateNewPrice(UUID auctionID, Integer price) {
+                    setAuctionPrice(auctionID, price);
                 }
             });
 
+            auctionPanel.add(auction.getAuctionPanel());
+            auctionList.put(auctionBean.getUUID(), auction);
+
             mainPanel.revalidate();
             mainPanel.repaint();
+        } else {
+            LOGGER.warning("Trying to add a duplicated auction to the list - Auction : " + auctionBean.toString());
         }
     }
 
     /**
      * Set an new price for a given AuctionBean
      */
-    private void setAuctionPrice(AuctionBean auctionBean){
+    private void setAuctionPrice(UUID auctionID, int newPrice){
         LOGGER.info("auctionPrice set !");
+        AuctionGui auction = auctionList.get(auctionID);
         //UPDATE AUCTION IN OUR LIST
-        auctionList.get(auctionBean.getName()).setProperties(auctionBean);
+        auction.setPrice(newPrice);
 
         //RELOAD THE MAIN PANEL
-        auctionList.get(auctionBean.getName()).getAuctionPanel().revalidate();
-        auctionList.get(auctionBean.getName()).getAuctionPanel().repaint();
+        auction.getAuctionPanel().revalidate();
+        auction.getAuctionPanel().repaint();
 
         mainPanel.revalidate();
         mainPanel.repaint();
@@ -243,13 +248,13 @@ public class ClientGui {
      * @param args
      */
     public static void main(String[] args) throws RemoteException, InterruptedException, NotBoundException {
-        //IServer server = new Server();
-        IServer server = (IServer) LocateRegistry.getRegistry("localhost", 1099).lookup("com.alma.pay2bid.server.Server"); //TODO: parameterize host/port
+        //TODO: parameterize host/port
+        IServer server = (IServer) LocateRegistry.getRegistry("localhost", 1099).lookup("com.alma.pay2bid.server.Server");
         Client client = new Client(server, "Arnaud");
         Client client2 = new Client(server, "Thomas");
 
-        ClientGui c = new ClientGui(client);
-        ClientGui c2 = new ClientGui(client2);
+        ClientGui c = new ClientGui(client, server);
+        ClientGui c2 = new ClientGui(client2, server);
 
         c.show();
         c2.show();

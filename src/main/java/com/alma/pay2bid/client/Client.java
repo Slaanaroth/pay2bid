@@ -131,11 +131,12 @@ public class Client extends UnicastRemoteObject implements IClient, IBidSoldObse
     }
 
     /**
+     * @param auctionID
      * @param price
      * @throws RemoteException
      */
     @Override
-    public void newPrice(int price,AuctionBean auction) throws RemoteException {
+    public void newPrice(UUID auctionID, int price) throws RemoteException {
         /*if(currentAuction == null) {
             throw new Exception();
         }*/
@@ -156,7 +157,7 @@ public class Client extends UnicastRemoteObject implements IClient, IBidSoldObse
 
         // notify the observers of the new price for the current auction
         for (INewPriceObserver observer : newPriceObservers) {
-            observer.updateNewPrice(price,auction);
+            observer.updateNewPrice(auctionID, price);
         }
     }
 

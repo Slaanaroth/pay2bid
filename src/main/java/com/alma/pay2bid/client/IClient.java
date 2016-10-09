@@ -8,6 +8,7 @@ import com.alma.pay2bid.client.observer.INewPriceObserver;
 import java.io.Serializable;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
+import java.util.UUID;
 
 /**
  *
@@ -32,10 +33,11 @@ public interface IClient extends Remote, Serializable {
     void bidSold(IClient buyer) throws RemoteException;
 
     /**
+     * @param auctionID
      * @param price
      * @throws RemoteException
      */
-    void newPrice(int price,AuctionBean auction) throws RemoteException;
+    void newPrice(UUID auctionID, int price) throws RemoteException;
 
     /**
      * @return

@@ -73,7 +73,7 @@ public class AuctionGui{
 
         statusAuction = new JLabel("",JLabel.CENTER);
 
-        // add all the elemnts to the panel
+        // add all the elements to the panel
         newAuctionPanel.add(nameLabel);
         newAuctionPanel.add(name);
 
@@ -84,8 +84,8 @@ public class AuctionGui{
         newAuctionPanel.add(description);
     }
 
-    public void  setProperties(AuctionBean a){
-        auctionPriceValue.setText(String.valueOf(a.getPrice()));
+    public void  setPrice(int newPrice){
+        auctionPriceValue.setText(String.valueOf(newPrice));
     }
 
     public JTextField getAuctionBid() {
