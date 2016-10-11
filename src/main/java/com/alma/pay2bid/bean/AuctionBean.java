@@ -12,7 +12,6 @@ public class AuctionBean implements IBean {
     private String description;
 
     public AuctionBean(int price, String name, String description) {
-        uuid = UUID.randomUUID();
         this.price = price;
         this.name = name;
         this.description = description;
@@ -21,6 +20,10 @@ public class AuctionBean implements IBean {
     @Override
     public UUID getUUID() {
         return uuid;
+    }
+
+    public void setUuid(UUID uuid) {
+        this.uuid = uuid;
     }
 
     public int getPrice() {

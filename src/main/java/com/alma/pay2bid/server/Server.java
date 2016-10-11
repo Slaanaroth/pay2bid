@@ -7,10 +7,7 @@ import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Queue;
+import java.util.*;
 import java.util.logging.Logger;
 
 /**
@@ -54,6 +51,8 @@ public class Server extends UnicastRemoteObject implements IServer {
      */
     @Override
     public synchronized void placeAuction(AuctionBean auction) throws RemoteException {
+        // generate a new UUID for the incoming auction, then put it in the queue
+        auction.setUuid(UUID.randomUUID());
         auctions.add(auction);
         if (!auctionInProgress && (auctions.size() == 1)) {
             launchAuction();
