@@ -21,10 +21,24 @@ import java.util.logging.Logger;
 public class Client extends UnicastRemoteObject implements IClient, IBidSoldObservable, INewAuctionObservable, INewPriceObservable {
 
     private class TimerManager extends TimerTask {
+        public String timeString;
+        private long time = TIME_TO_RAISE_BID;
+        private Timer timer;
+
+        public TimerManager(String timeMessage){
+            this.timeString = timeMessage;
+        }
+
         @Override
         public void run() {
             try {
-                server.timeElapsed(Client.this);
+                time -=TIME_TO_REFRESH;
+                timeString = Long.toString(time);
+                if(time == 0) {
+                    server.timeElapsed(Client.this);
+                }else{
+
+                }
             } catch (RemoteException e) {
                 e.printStackTrace();
             } catch (InterruptedException e) {
@@ -36,11 +50,14 @@ public class Client extends UnicastRemoteObject implements IClient, IBidSoldObse
     private static final Logger LOGGER = Logger.getLogger(Client.class.getCanonicalName());
     //TODO: move all constants/configs in Config class
     private static final long TIME_TO_RAISE_BID = 30000;
+    private static final long TIME_TO_REFRESH = 1000;
+
     private IServer server;
     //TODO: use ExecutorService instead of Timer ?
     private Timer timer;
     private AuctionBean currentAuction;
     private String name;
+    private String timeElapsed;
     private ClientState state;
 
     // collections of observers used to connect the client to the GUI
@@ -80,7 +97,7 @@ public class Client extends UnicastRemoteObject implements IClient, IBidSoldObse
         currentAuction = auction;
 
         timer = new Timer();
-        timer.schedule(new TimerManager(), TIME_TO_RAISE_BID);
+        timer.schedule(new TimerManager(timeElapsed),0, TIME_TO_REFRESH);
 
         state = ClientState.WAITING;
 
@@ -151,7 +168,7 @@ public class Client extends UnicastRemoteObject implements IClient, IBidSoldObse
         }
 
         timer = new Timer();
-        timer.schedule(new TimerManager(), TIME_TO_RAISE_BID);
+        timer.schedule(new TimerManager(timeElapsed),0, TIME_TO_REFRESH);
 
         state = ClientState.WAITING;
 
