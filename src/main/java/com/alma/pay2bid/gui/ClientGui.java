@@ -10,7 +10,6 @@ import com.alma.pay2bid.gui.listeners.SubmitAuctionListener;
 import com.alma.pay2bid.gui.listeners.RaiseBidButtonListener;
 import com.alma.pay2bid.gui.listeners.AuctionInputListener;
 import com.alma.pay2bid.server.IServer;
-import com.alma.pay2bid.server.Server;
 
 import javax.swing.*;
 import java.awt.*;
@@ -32,6 +31,7 @@ public class ClientGui {
 
     private static final Logger LOGGER = Logger.getLogger(ClientGui.class.getCanonicalName());
     private Client client;
+    private IServer server;
     private HashMap<UUID, AuctionGui> auctionList;
 
     /**
@@ -53,6 +53,7 @@ public class ClientGui {
      */
     public ClientGui(Client client, IServer server) throws RemoteException, InterruptedException {
         this.client = client;
+        this.server = server;
         auctionList = new HashMap<UUID, AuctionGui>();
         server.register(this.client);
 
@@ -82,6 +83,11 @@ public class ClientGui {
         mainFrame.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent windowEvent){
+                try {
+                    server.disconnect(client);
+                } catch (RemoteException e) {
+                    e.printStackTrace();
+                }
                 exit(0);
             }
         });

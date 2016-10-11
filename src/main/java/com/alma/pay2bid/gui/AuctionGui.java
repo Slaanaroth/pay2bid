@@ -18,6 +18,8 @@ public class AuctionGui{
     private JPanel auctionPanel;
     private JLabel auctionPriceLabel;
     private JLabel auctionPriceValue;
+    private JLabel auctionTimer;
+    private JLabel auctionTimerLabel;
     private JTextField auctionBid;
     private JLabel auctionBidLabel;
     private JButton raiseButton;
@@ -56,6 +58,13 @@ public class AuctionGui{
         auctionPanel.add(auctionBidLabel);
         auctionPanel.add(auctionBid);
         auctionPanel.setBorder(BorderFactory.createTitledBorder(a.getName()));
+
+        //Create the timer label
+        auctionTimer = new JLabel("0");
+        auctionTimerLabel = new JLabel("Remaining time : ");
+        auctionTimer.setLabelFor(auctionTimerLabel);
+        auctionPanel.add(auctionTimerLabel);
+        auctionPanel.add(auctionTimer);
 
         // create the input panel
         newAuctionPanel = new JPanel();
@@ -97,7 +106,7 @@ public class AuctionGui{
 
     public void setRaiseButton(JButton raiseButton) {
         this.raiseButton = raiseButton;
-        auctionPanel.add(raiseButton, 4);
+        auctionPanel.add(raiseButton, 6);
     }
 
     public void  setPrice(int newPrice){

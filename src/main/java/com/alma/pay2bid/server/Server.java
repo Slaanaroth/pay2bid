@@ -25,6 +25,8 @@ public class Server extends UnicastRemoteObject implements IServer {
     private List<IClient> clients = new ArrayList<IClient>();
     private Queue<AuctionBean> auctions = new LinkedList<AuctionBean>();
 
+    private static final int MIN_NUMBER_CLIENTS = 1;
+
     public Server() throws RemoteException {
         super();
     }
@@ -55,7 +57,7 @@ public class Server extends UnicastRemoteObject implements IServer {
         auction.setUuid(UUID.randomUUID());
         auctions.add(auction);
         LOGGER.info("Auction '" + auction.getName() + "' placed in queue");
-        if (!auctionInProgress && (auctions.size() == 1) && (clients.size() > 1)) {
+        if (!auctionInProgress && (auctions.size() == 1) && (clients.size() >= MIN_NUMBER_CLIENTS)) {
             launchAuction();
         }
     }
@@ -75,6 +77,12 @@ public class Server extends UnicastRemoteObject implements IServer {
         } catch (InterruptedException e) {
             LOGGER.warning(e.getMessage());
         }
+    }
+
+    @Override
+    public void disconnect(IClient client) throws RemoteException {
+        LOGGER.info("Disconnect : Client " + client.toString());
+        clients.remove(client);
     }
 
     /**
@@ -123,7 +131,7 @@ public class Server extends UnicastRemoteObject implements IServer {
             validateRegistrations();
 
             // launch the next auction if there is one available and enough clients
-            if (!auctions.isEmpty() && (clients.size() > 1)) {
+            if (!auctions.isEmpty() && (clients.size() >= MIN_NUMBER_CLIENTS)) {
                 launchAuction();
             }
         }
