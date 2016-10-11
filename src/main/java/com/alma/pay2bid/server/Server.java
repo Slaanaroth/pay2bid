@@ -54,7 +54,8 @@ public class Server extends UnicastRemoteObject implements IServer {
         // generate a new UUID for the incoming auction, then put it in the queue
         auction.setUuid(UUID.randomUUID());
         auctions.add(auction);
-        if (!auctionInProgress && (auctions.size() == 1)) {
+        LOGGER.info("Auction '" + auction.getName() + "' placed in queue");
+        if (!auctionInProgress && (auctions.size() == 1) && (clients.size() > 1)) {
             launchAuction();
         }
     }
@@ -121,8 +122,8 @@ public class Server extends UnicastRemoteObject implements IServer {
             // validate the registrations of clients in the monitor's queue
             validateRegistrations();
 
-            // launch the next auction if there is one available
-            if (!auctions.isEmpty()) {
+            // launch the next auction if there is one available and enough clients
+            if (!auctions.isEmpty() && (clients.size() > 1)) {
                 launchAuction();
             }
         }

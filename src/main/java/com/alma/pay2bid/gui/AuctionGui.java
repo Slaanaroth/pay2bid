@@ -4,6 +4,7 @@ import com.alma.pay2bid.bean.AuctionBean;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.UUID;
 
 /**
  * Created by Folkvir on 02/10/2016.
@@ -19,6 +20,7 @@ public class AuctionGui{
     private JLabel auctionPriceValue;
     private JTextField auctionBid;
     private JLabel auctionBidLabel;
+    private JButton raiseButton;
 
     /**
      * Properties for the input's action frame
@@ -37,7 +39,6 @@ public class AuctionGui{
         auctionPanel = new JPanel();
         auctionPanel.setMaximumSize(new Dimension(500, 150));
         auctionPanel.setLayout(new GridLayout(4, 3, 5, 5));
-        //p.setBackground(Color.cyan);
 
         // Create the price label
         auctionPriceLabel = new JLabel(" Price : ");
@@ -48,7 +49,7 @@ public class AuctionGui{
         auctionPanel.add(auctionPriceValue);
 
         // Create the bid field
-        auctionBid = new JTextField("",JLabel.TRAILING);
+        auctionBid = new JTextField("", JLabel.TRAILING);
         auctionBidLabel = new JLabel("Bid : ");
 
         auctionBidLabel.setLabelFor(auctionBid);
@@ -56,6 +57,7 @@ public class AuctionGui{
         auctionPanel.add(auctionBid);
         auctionPanel.setBorder(BorderFactory.createTitledBorder(a.getName()));
 
+        // create the input panel
         newAuctionPanel = new JPanel();
         newAuctionPanel.setLayout(new GridLayout(4,3,5,5));
 
@@ -71,7 +73,7 @@ public class AuctionGui{
         description = new JTextField();
         descriptionLabel.setLabelFor(description);
 
-        statusAuction = new JLabel("",JLabel.CENTER);
+        statusAuction = new JLabel("", JLabel.CENTER);
 
         // add all the elements to the panel
         newAuctionPanel.add(nameLabel);
@@ -82,6 +84,20 @@ public class AuctionGui{
 
         newAuctionPanel.add(descriptionLabel);
         newAuctionPanel.add(description);
+    }
+
+    public void disable() {
+        // remove the input elements
+        auctionBid.setVisible(false);
+        auctionBidLabel.setVisible(false);
+        auctionPanel.remove(raiseButton);
+
+        auctionPanel.add(new JLabel("Bid sold"), 4);
+    }
+
+    public void setRaiseButton(JButton raiseButton) {
+        this.raiseButton = raiseButton;
+        auctionPanel.add(raiseButton, 4);
     }
 
     public void  setPrice(int newPrice){

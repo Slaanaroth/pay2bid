@@ -2,6 +2,8 @@ package com.alma.pay2bid.gui;
 
 import com.alma.pay2bid.bean.AuctionBean;
 import com.alma.pay2bid.client.Client;
+import com.alma.pay2bid.client.IClient;
+import com.alma.pay2bid.client.observer.IBidSoldObserver;
 import com.alma.pay2bid.client.observer.INewAuctionObserver;
 import com.alma.pay2bid.client.observer.INewPriceObserver;
 import com.alma.pay2bid.gui.listeners.SubmitAuctionListener;
@@ -109,10 +111,6 @@ public class ClientGui {
         mainPanel = new JPanel();
         mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
 
-        // TODO : what to do with this chunk of code ? (@Thomas -> @Arnaud)
-        //controlPanel = new JPanel();
-        //controlPanel.setLayout(new FlowLayout());
-
         auctionPanel = new JPanel();
         auctionPanel.setLayout(new BoxLayout(auctionPanel, BoxLayout.Y_AXIS));
         mainPanel.add(auctionPanel);
@@ -139,13 +137,13 @@ public class ClientGui {
         if(!auctionList.containsKey(auctionBean.getUUID())) {
             LOGGER.info("Add new auction to auctionPanel");
 
-            AuctionGui auction = new AuctionGui(auctionBean);
+            final AuctionGui auction = new AuctionGui(auctionBean);
 
             JButton raiseBidButton = new JButton("Raise the bid");
             raiseBidButton.setActionCommand("raiseBid");
-            auction.getAuctionPanel().add(raiseBidButton, 4);
-
             raiseBidButton.addActionListener(new RaiseBidButtonListener(client, client.getServer(), auction.getAuctionBid(), statusLabel));
+            auction.setRaiseButton(raiseBidButton);
+
             //Now add the observer to receive all price updates
             client.addNewPriceObserver(new INewPriceObserver() {
                 @Override
@@ -154,11 +152,19 @@ public class ClientGui {
                 }
             });
 
+            client.addBidSoldObserver(new IBidSoldObserver() {
+                @Override
+                public void updateBidSold(IClient client) {
+                    auction.disable();
+                }
+            });
+
             auctionPanel.add(auction.getAuctionPanel());
             auctionList.put(auctionBean.getUUID(), auction);
 
             mainPanel.revalidate();
             mainPanel.repaint();
+
         } else {
             LOGGER.warning("Trying to add a duplicated auction to the list - Auction : " + auctionBean.toString());
         }
