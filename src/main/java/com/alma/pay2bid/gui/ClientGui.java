@@ -125,7 +125,7 @@ public class ClientGui {
     /**
      * Show the client GUI
      */
-    private void show(){
+    public void show(){
         mainFrame.setVisible(true);
     }
 

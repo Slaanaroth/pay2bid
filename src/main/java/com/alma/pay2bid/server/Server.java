@@ -128,18 +128,4 @@ public class Server extends UnicastRemoteObject implements IServer {
             }
         }
     }
-
-    public static void main(String[] args) {
-        try {
-            String name = "com.alma.pay2bid.server.Server";
-            IServer server = new Server();
-            //TODO: parameterize port
-            int port = 1099;
-            Registry registry = LocateRegistry.createRegistry(port);
-            registry.rebind(name, server);
-            LOGGER.info("Server up and running at localhost on port " + port);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
 }
