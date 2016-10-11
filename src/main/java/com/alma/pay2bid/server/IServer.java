@@ -23,6 +23,8 @@ public interface IServer extends Remote {
      */
     void register(IClient client) throws RemoteException, InterruptedException;
 
+    void disconnect(IClient client) throws RemoteException;
+
     /**
      * @param client
      * @param newBid
