@@ -9,7 +9,7 @@ import java.util.UUID;
 /**
  * Created by Folkvir on 02/10/2016.
  */
-public class AuctionGui{
+public class AuctionView {
     AuctionBean auction;
 
     /**
@@ -24,19 +24,7 @@ public class AuctionGui{
     private JLabel auctionBidLabel;
     private JButton raiseButton;
 
-    /**
-     * Properties for the input's action frame
-     */
-    private JPanel newAuctionPanel;
-    private JLabel nameLabel;
-    private JTextField  name;
-    private JLabel priceLabel;
-    public JTextField  price;
-    private JLabel descriptionLabel;
-    private JTextField  description;
-    private JLabel statusAuction;
-
-    public AuctionGui(AuctionBean a){
+    public AuctionView(AuctionBean a){
         auction = a;
         auctionPanel = new JPanel();
         auctionPanel.setMaximumSize(new Dimension(500, 150));
@@ -65,34 +53,6 @@ public class AuctionGui{
         auctionTimer.setLabelFor(auctionTimerLabel);
         auctionPanel.add(auctionTimerLabel);
         auctionPanel.add(auctionTimer);
-
-        // create the input panel
-        newAuctionPanel = new JPanel();
-        newAuctionPanel.setLayout(new GridLayout(4,3,5,5));
-
-        nameLabel = new JLabel("Name : ");
-        name = new JTextField();
-        nameLabel.setLabelFor(name);
-
-        priceLabel = new JLabel("Price : ");
-        price = new JTextField();
-        priceLabel.setLabelFor(price);
-
-        descriptionLabel = new JLabel("Description : ");
-        description = new JTextField();
-        descriptionLabel.setLabelFor(description);
-
-        statusAuction = new JLabel("", JLabel.CENTER);
-
-        // add all the elements to the panel
-        newAuctionPanel.add(nameLabel);
-        newAuctionPanel.add(name);
-
-        newAuctionPanel.add(priceLabel);
-        newAuctionPanel.add(price);
-
-        newAuctionPanel.add(descriptionLabel);
-        newAuctionPanel.add(description);
     }
 
     public void enable() {
@@ -113,7 +73,7 @@ public class AuctionGui{
         auctionPanel.add(raiseButton, 6);
     }
 
-    public void  setPrice(int newPrice){
+    public void setPrice(int newPrice){
         auctionPriceValue.setText(String.valueOf(newPrice));
     }
 
@@ -123,21 +83,5 @@ public class AuctionGui{
 
     public JPanel getAuctionPanel() {
         return auctionPanel;
-    }
-
-    public JTextField getName() {
-        return name;
-    }
-
-    public JPanel getNewAuctionPanel() {
-        return newAuctionPanel;
-    }
-
-    public JTextField getDescription() {
-        return description;
-    }
-
-    public JLabel getStatusAuction() {
-        return statusAuction;
     }
 }

@@ -6,7 +6,6 @@ import com.alma.pay2bid.client.IClient;
 import com.alma.pay2bid.client.observer.IBidSoldObserver;
 import com.alma.pay2bid.client.observer.INewAuctionObserver;
 import com.alma.pay2bid.client.observer.INewPriceObserver;
-import com.alma.pay2bid.gui.listeners.SubmitAuctionListener;
 import com.alma.pay2bid.gui.listeners.RaiseBidButtonListener;
 import com.alma.pay2bid.gui.listeners.AuctionInputListener;
 import com.alma.pay2bid.server.IServer;
@@ -32,7 +31,7 @@ public class ClientGui {
     private static final Logger LOGGER = Logger.getLogger(ClientGui.class.getCanonicalName());
     private Client client;
     private IServer server;
-    private HashMap<UUID, AuctionGui> auctionList;
+    private HashMap<UUID, AuctionView> auctionList;
 
     /**
      * Main frame & elements
@@ -54,7 +53,7 @@ public class ClientGui {
     public ClientGui(Client client, IServer server) throws RemoteException, InterruptedException {
         this.client = client;
         this.server = server;
-        auctionList = new HashMap<UUID, AuctionGui>();
+        auctionList = new HashMap<UUID, AuctionView>();
         server.register(this.client);
 
         client.addNewAuctionObserver(new INewAuctionObserver() {
@@ -143,7 +142,7 @@ public class ClientGui {
         if(!auctionList.containsKey(auctionBean.getUUID())) {
             LOGGER.info("Add new auction to auctionPanel");
 
-            final AuctionGui auction = new AuctionGui(auctionBean);
+            final AuctionView auction = new AuctionView(auctionBean);
 
             JButton raiseBidButton = new JButton("Raise the bid");
             raiseBidButton.setActionCommand("raiseBid");
@@ -182,7 +181,7 @@ public class ClientGui {
      */
     private void setAuctionPrice(UUID auctionID, int newPrice){
         LOGGER.info("auctionPrice set !");
-        AuctionGui auction = auctionList.get(auctionID);
+        AuctionView auction = auctionList.get(auctionID);
         //UPDATE AUCTION IN OUR LIST
         auction.setPrice(newPrice);
 
@@ -197,47 +196,9 @@ public class ClientGui {
     /**
      * Create the menu to add a new Auction
      */
-    public void newAuctionView(){
-        auctionFrame = new JFrame("Add a new auction");
-        auctionFrame.setLayout(new BorderLayout());
-        auctionFrame.setSize(new Dimension(500, 200));
-        auctionFrame.setResizable(false);
-
-        AuctionBean auctionBean = new AuctionBean(0, "", "");
-        AuctionGui auctionGui = new AuctionGui(auctionBean);
-
-        auctionFrame.add(auctionGui.getNewAuctionPanel(), BorderLayout.CENTER);
-
-        JButton auctionSend = new JButton("SEND NEW AUCTION");
-        auctionSend.setActionCommand("newAuction");
-        auctionSend.addActionListener(new SubmitAuctionListener(auctionGui, client, auctionFrame, statusLabel));
-        auctionGui.getNewAuctionPanel().add(auctionSend);
-
-        auctionFrame.add(auctionGui.getStatusAuction(), BorderLayout.PAGE_END);
-
-        auctionFrame.setVisible(true);
-    }
-
-    /**
-     * Send a new auction to the server
-     * @deprecated Prefer the use of {@link Client#submit(AuctionBean)} to this method, as it creates a new intermediate layer of code not needed
-     * @param auction
-     * @throws RemoteException
-     */
-    @Deprecated()
-    public void sendAuction(AuctionGui auction) throws RemoteException {
-        auctionFrame.setVisible(false);
-        auctionFrame = null;
-
-        LOGGER.info("New auction send to the server : [...]");
-        LOGGER.info("Name : "+auction.getName().getText());
-        LOGGER.info("Price : "+auction.price.getText());
-        LOGGER.info("Description : "+auction.getDescription().getText());
-
-        // send the new auction through the client
-        AuctionBean a = new AuctionBean(Integer.parseInt(auction.price.getText()), auction.getName().getText(), auction.getDescription().getText());
-        client.submit(a);
-        statusLabel.setText("New auction sent...");
+    public void newAuctionView() {
+        AuctionInput input = new AuctionInput(client);
+        input.showFrame();
     }
 
     /**

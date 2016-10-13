@@ -2,9 +2,9 @@ package com.alma.pay2bid.gui.listeners;
 
 import com.alma.pay2bid.bean.AuctionBean;
 import com.alma.pay2bid.client.IClient;
-import com.alma.pay2bid.gui.AuctionGui;
+import com.alma.pay2bid.gui.AuctionView;
+import com.alma.pay2bid.gui.AuctionInput;
 
-import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -12,16 +12,13 @@ import java.awt.event.ActionListener;
  * Created by Folkvir on 02/10/2016.
  */
 public class SubmitAuctionListener implements ActionListener{
-    private AuctionGui auction;
+    private AuctionView auction;
     private IClient client;
-    private JFrame auctionFrame;
-    private JLabel statusLabel;
+    private AuctionInput input;
 
-    public SubmitAuctionListener(AuctionGui a, IClient c, JFrame auctionFrame, JLabel statusLabel){
-        this.auction = a;
+    public SubmitAuctionListener(IClient c, AuctionInput input) {
         this.client = c;
-        this.auctionFrame = auctionFrame;
-        this.statusLabel = statusLabel;
+        this.input = input;
     }
 
     @Override
@@ -29,15 +26,14 @@ public class SubmitAuctionListener implements ActionListener{
         System.out.println("actionPerformed into SubmitAuctionListener");
         try {
             // send the new auction to the server through the client
-            AuctionBean a = new AuctionBean(Integer.parseInt(auction.price.getText()), auction.getName().getText(), auction.getDescription().getText());
+            AuctionBean a = new AuctionBean(Integer.parseInt(input.getAuctionPrice()), input.getAuctionName(), input.getDescription());
             client.submit(a);
 
             // close the menu & refresh the status label
-            auctionFrame.setVisible(false);
-            auctionFrame = null;
-            statusLabel.setText("New auction sent...");
-        } catch(Exception e){
-            auction.getStatusAuction().setText("Price must be an Integer");
+            input.hideFrame();
+            input.getStatusLabel().setText("New auction sent...");
+        } catch(Exception e) {
+            input.getStatusLabel().setText("Price must be an Integer");
         }
     }
 }

@@ -188,10 +188,12 @@ public class Client extends UnicastRemoteObject implements IClient, IBidSoldObse
         return name;
     }
 
+    @Override
     public ClientState getState() throws RemoteException {
         return state;
     }
 
+    @Override
     public void setState(ClientState state) {
         this.state = state;
     }

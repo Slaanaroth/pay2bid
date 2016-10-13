@@ -36,7 +36,7 @@ public class Server extends UnicastRemoteObject implements IServer {
     }
 
     private static final Logger LOGGER = Logger.getLogger(Server.class.getCanonicalName());
-    private static final long CHECK_CONN_DELAY = 30000;
+    private static final long CHECK_CONN_DELAY = 30000; // TODO : set a more accurate value for this @Thomas
 
     private boolean auctionInProgress = false;
     private AuctionBean currentAuction;

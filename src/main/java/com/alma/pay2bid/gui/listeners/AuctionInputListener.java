@@ -20,15 +20,6 @@ public class AuctionInputListener implements ActionListener {
         String command = actionEvent.getActionCommand();
         if("newAuction".equals(command) && (gui.getAuctionFrame() == null))  {
             gui.newAuctionView();
-            /*statusLabel.setText("New Auction sent.");
-
-            Auction a = new Auction(10,"Noix de coco x10", "");
-
-            //TEST DE LA FONCTION SETAUCTIONPRICE
-            addAuctionPanel(a);
-            a.setPrice(50);
-            LOGGER.info(a.getPrice());
-            setAuctionPrice(a);*/
         }
     }
 }

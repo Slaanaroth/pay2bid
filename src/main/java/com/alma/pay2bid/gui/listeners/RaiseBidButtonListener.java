@@ -1,8 +1,7 @@
 package com.alma.pay2bid.gui.listeners;
 
 import com.alma.pay2bid.client.IClient;
-import com.alma.pay2bid.gui.AuctionGui;
-import com.alma.pay2bid.gui.ClientGui;
+import com.alma.pay2bid.gui.AuctionView;
 import com.alma.pay2bid.server.IServer;
 
 import javax.swing.*;
@@ -16,14 +15,14 @@ import java.rmi.RemoteException;
 public class RaiseBidButtonListener implements ActionListener {
     private IClient client;
     private IServer server;
-    private AuctionGui auctionGui;
+    private AuctionView auctionView;
     private JTextField bidField;
     private JLabel statusLabel;
 
-    public RaiseBidButtonListener(IClient client, IServer server, AuctionGui gui, JLabel statusLabel) {
+    public RaiseBidButtonListener(IClient client, IServer server, AuctionView gui, JLabel statusLabel) {
         this.client = client;
         this.server = server;
-        auctionGui = gui;
+        auctionView = gui;
         this.bidField = gui.getAuctionBid();
         this.statusLabel = statusLabel;
     }
@@ -35,7 +34,7 @@ public class RaiseBidButtonListener implements ActionListener {
             statusLabel.setText("New bid sent.");
             try {
                 server.raiseBid(client, Integer.valueOf(bidField.getText()));
-                auctionGui.disable();
+                auctionView.disable();
             } catch (RemoteException e) {
                 e.printStackTrace();
             }
