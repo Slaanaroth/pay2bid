@@ -19,10 +19,6 @@ public class ClientBean implements IBean {
         this.name = name;
     }
 
-    public UUID getUuid() {
-        return uuid;
-    }
-
     public void setUuid(UUID uuid) {
         this.uuid = uuid;
     }

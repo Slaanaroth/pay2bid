@@ -1,6 +1,7 @@
 package com.alma.pay2bid.client;
 
 import com.alma.pay2bid.bean.AuctionBean;
+import com.alma.pay2bid.bean.ClientBean;
 import com.alma.pay2bid.client.observer.IBidSoldObserver;
 import com.alma.pay2bid.client.observer.INewAuctionObserver;
 import com.alma.pay2bid.client.observer.INewPriceObserver;
@@ -44,4 +45,8 @@ public interface IClient extends Remote, Serializable {
      * @throws RemoteException
      */
     String getName() throws RemoteException;
+
+    ClientState getState() throws RemoteException;
+
+    void setState(ClientState newState) throws RemoteException;
 }

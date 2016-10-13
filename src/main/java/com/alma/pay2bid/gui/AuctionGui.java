@@ -95,13 +95,17 @@ public class AuctionGui{
         newAuctionPanel.add(description);
     }
 
+    public void enable() {
+        auctionBid.setVisible(true);
+        auctionBidLabel.setVisible(true);
+        raiseButton.setVisible(true);
+    }
+
     public void disable() {
         // remove the input elements
         auctionBid.setVisible(false);
         auctionBidLabel.setVisible(false);
-        auctionPanel.remove(raiseButton);
-
-        auctionPanel.add(new JLabel("Bid sold"), 4);
+        raiseButton.setVisible(false);
     }
 
     public void setRaiseButton(JButton raiseButton) {

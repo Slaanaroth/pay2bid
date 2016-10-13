@@ -147,7 +147,7 @@ public class ClientGui {
 
             JButton raiseBidButton = new JButton("Raise the bid");
             raiseBidButton.setActionCommand("raiseBid");
-            raiseBidButton.addActionListener(new RaiseBidButtonListener(client, client.getServer(), auction.getAuctionBid(), statusLabel));
+            raiseBidButton.addActionListener(new RaiseBidButtonListener(client, client.getServer(), auction, statusLabel));
             auction.setRaiseButton(raiseBidButton);
 
             //Now add the observer to receive all price updates
@@ -155,6 +155,7 @@ public class ClientGui {
                 @Override
                 public void updateNewPrice(UUID auctionID, Integer price) {
                     setAuctionPrice(auctionID, price);
+                    auction.enable();
                 }
             });
 

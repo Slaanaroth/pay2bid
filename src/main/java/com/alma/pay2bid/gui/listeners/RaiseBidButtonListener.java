@@ -16,13 +16,15 @@ import java.rmi.RemoteException;
 public class RaiseBidButtonListener implements ActionListener {
     private IClient client;
     private IServer server;
+    private AuctionGui auctionGui;
     private JTextField bidField;
     private JLabel statusLabel;
 
-    public RaiseBidButtonListener(IClient client, IServer server, JTextField bidField, JLabel statusLabel) {
+    public RaiseBidButtonListener(IClient client, IServer server, AuctionGui gui, JLabel statusLabel) {
         this.client = client;
         this.server = server;
-        this.bidField = bidField;
+        auctionGui = gui;
+        this.bidField = gui.getAuctionBid();
         this.statusLabel = statusLabel;
     }
 
@@ -33,6 +35,7 @@ public class RaiseBidButtonListener implements ActionListener {
             statusLabel.setText("New bid sent.");
             try {
                 server.raiseBid(client, Integer.valueOf(bidField.getText()));
+                auctionGui.disable();
             } catch (RemoteException e) {
                 e.printStackTrace();
             }

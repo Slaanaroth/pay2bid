@@ -1,6 +1,7 @@
 package com.alma.pay2bid.client;
 
 import com.alma.pay2bid.bean.AuctionBean;
+import com.alma.pay2bid.bean.ClientBean;
 import com.alma.pay2bid.client.observable.IBidSoldObservable;
 import com.alma.pay2bid.client.observable.INewAuctionObservable;
 import com.alma.pay2bid.client.observable.INewPriceObservable;
@@ -52,18 +53,19 @@ public class Client extends UnicastRemoteObject implements IClient, IBidSoldObse
     private static final long TIME_TO_RAISE_BID = 30000;
     private static final long TIME_TO_REFRESH = 1000;
 
+    private ClientBean identity;
     private IServer server;
     //TODO: use ExecutorService instead of Timer ?
-    private Timer timer;
+    private transient Timer timer;
     private AuctionBean currentAuction;
     private String name;
     private String timeElapsed;
     private ClientState state;
 
     // collections of observers used to connect the client to the GUI
-    private Collection<IBidSoldObserver> bidSoldObservers = new ArrayList<IBidSoldObserver>();
-    private Collection<INewAuctionObserver> newAuctionObservers = new ArrayList<INewAuctionObserver>();
-    private Collection<INewPriceObserver> newPriceObservers = new ArrayList<INewPriceObserver>();
+    private transient Collection<IBidSoldObserver> bidSoldObservers = new ArrayList<IBidSoldObserver>();
+    private transient Collection<INewAuctionObserver> newAuctionObservers = new ArrayList<INewAuctionObserver>();
+    private transient Collection<INewPriceObserver> newPriceObservers = new ArrayList<INewPriceObserver>();
 
     /**
      * To get a server reference:
@@ -77,6 +79,7 @@ public class Client extends UnicastRemoteObject implements IClient, IBidSoldObse
     public Client(IServer server, String name) throws RemoteException {
         super();
 
+        identity = new ClientBean(UUID.randomUUID(), name, "default password", name);
         this.server = server;
         this.name = name;
         state = ClientState.WAITING;
@@ -183,6 +186,14 @@ public class Client extends UnicastRemoteObject implements IClient, IBidSoldObse
     @Override
     public String getName() throws RemoteException {
         return name;
+    }
+
+    public ClientState getState() throws RemoteException {
+        return state;
+    }
+
+    public void setState(ClientState state) {
+        this.state = state;
     }
 
     @Override

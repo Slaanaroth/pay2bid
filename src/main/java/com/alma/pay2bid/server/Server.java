@@ -1,11 +1,10 @@
 package com.alma.pay2bid.server;
 
 import com.alma.pay2bid.bean.AuctionBean;
+import com.alma.pay2bid.client.ClientState;
 import com.alma.pay2bid.client.IClient;
 
 import java.rmi.RemoteException;
-import java.rmi.registry.LocateRegistry;
-import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.*;
 import java.util.logging.Logger;
@@ -24,6 +23,7 @@ public class Server extends UnicastRemoteObject implements IServer {
     private int nbParticipants = 0;
     private List<IClient> clients = new ArrayList<IClient>();
     private Queue<AuctionBean> auctions = new LinkedList<AuctionBean>();
+    private HashMap<IClient, Integer> bidByClient = new HashMap<IClient, Integer>();
 
     private static final int MIN_NUMBER_CLIENTS = 1;
 
@@ -100,17 +100,11 @@ public class Server extends UnicastRemoteObject implements IServer {
      */
     @Override
     public synchronized void raiseBid(IClient client, int newBid) throws RemoteException {
-        int currentPrice = currentAuction.getPrice();
-        int newPrice = currentPrice + newBid;
-        currentAuction.setPrice(newPrice);
-        winner = client;
-
-        LOGGER.info("New bid '" + currentPrice + "' placed by client " + client.toString());
-
-        // transmit the new price to the clients
-        for (IClient c : clients) {
-            c.newPrice(currentAuction.getUUID(), newPrice);
-        }
+        if(client.getState() == ClientState.WAITING) {
+            bidByClient.put(client, newBid);
+            client.setState(ClientState.RAISING);
+            LOGGER.info("New bid '" + newBid + "' placed by client " + client.toString());
+        } // TODO : else throw a exception ? @Thomas
     }
 
     /**
@@ -122,17 +116,39 @@ public class Server extends UnicastRemoteObject implements IServer {
     public synchronized void timeElapsed(IClient client) throws RemoteException, InterruptedException {
         nbParticipants--;
         if (nbParticipants == 0) {
-            // notify all the clients to show the winner
-            for (IClient c : clients) {
-                c.bidSold(winner);
-            }
+            // case of a blank round : the auction is completed
+            if(bidByClient.size() == 0) {
+                // notify all the clients to show the winner
+                for (IClient c : clients) {
+                    c.bidSold(winner);
+                }
 
-            // validate the registrations of clients in the monitor's queue
-            validateRegistrations();
+                // validate the registrations of clients in the monitor's queue
+                validateRegistrations();
 
-            // launch the next auction if there is one available and enough clients
-            if (!auctions.isEmpty() && (clients.size() >= MIN_NUMBER_CLIENTS)) {
-                launchAuction();
+                // launch the next auction if there is one available and enough clients
+                if (!auctions.isEmpty() && (clients.size() >= MIN_NUMBER_CLIENTS)) {
+                    launchAuction();
+                }
+            } else {
+                // compute the winner of the current round
+                int maxBid = Integer.MIN_VALUE;
+                for(Map.Entry<IClient, Integer> pair : bidByClient.entrySet()) {
+                    if(pair.getValue() > maxBid) {
+                        maxBid = pair.getValue();
+                        winner = pair.getKey();
+                    }
+                }
+                LOGGER.info("End of a round. Bid = " + maxBid + " - The current winner is " + client.toString());
+
+                // clean the data structures before the next round
+                nbParticipants = clients.size();
+                bidByClient.clear();
+
+                // notify the clients of the new price & start a new round
+                for (IClient c : clients) {
+                    c.newPrice(currentAuction.getUUID(), maxBid);
+                }
             }
         }
     }
