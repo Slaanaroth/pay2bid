@@ -15,7 +15,28 @@ import java.util.logging.Logger;
  */
 public class Server extends UnicastRemoteObject implements IServer {
 
+    /**
+     * Daemon responsible of detecting closed connection with clients
+     */
+    private class ConnectionDaemon extends TimerTask {
+
+        @Override
+        public void run() {
+            List<IClient> clientsToRemove = new ArrayList<IClient>();
+            for(IClient client : clients) {
+                try {
+                    client.getName();
+                } catch (RemoteException e) {
+                    LOGGER.info("detected a closed connection with " + client.toString());
+                    clientsToRemove.add(client);
+                }
+            }
+            clients.removeAll(clientsToRemove);
+        }
+    }
+
     private static final Logger LOGGER = Logger.getLogger(Server.class.getCanonicalName());
+    private static final long CHECK_CONN_DELAY = 30000;
 
     private boolean auctionInProgress = false;
     private AuctionBean currentAuction;
@@ -29,6 +50,8 @@ public class Server extends UnicastRemoteObject implements IServer {
 
     public Server() throws RemoteException {
         super();
+        Timer daemonTimer = new Timer();
+        daemonTimer.schedule(new ConnectionDaemon(), 0, CHECK_CONN_DELAY);
     }
 
     /**
@@ -79,6 +102,11 @@ public class Server extends UnicastRemoteObject implements IServer {
         }
     }
 
+    /**
+     *
+     * @param client
+     * @throws RemoteException
+     */
     @Override
     public void disconnect(IClient client) throws RemoteException {
         LOGGER.info("Disconnect : Client " + client.toString());
