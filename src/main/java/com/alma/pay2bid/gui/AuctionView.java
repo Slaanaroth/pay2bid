@@ -40,7 +40,7 @@ public class AuctionView {
 
         // Create the bid field
         auctionBid = new JTextField("", JLabel.TRAILING);
-        auctionBidLabel = new JLabel("Bid : ");
+        auctionBidLabel = new JLabel("New Price : ");
 
         auctionBidLabel.setLabelFor(auctionBid);
         auctionPanel.add(auctionBidLabel);
@@ -53,6 +53,8 @@ public class AuctionView {
         auctionTimer.setLabelFor(auctionTimerLabel);
         auctionPanel.add(auctionTimerLabel);
         auctionPanel.add(auctionTimer);
+
+
     }
 
     public void enable() {
@@ -83,5 +85,9 @@ public class AuctionView {
 
     public JPanel getAuctionPanel() {
         return auctionPanel;
+    }
+
+    public void setAuctionTimer(String time) {
+        this.auctionTimer.setText(time);
     }
 }

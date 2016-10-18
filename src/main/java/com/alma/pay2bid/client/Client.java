@@ -5,6 +5,8 @@ import com.alma.pay2bid.bean.ClientBean;
 import com.alma.pay2bid.client.observable.IBidSoldObservable;
 import com.alma.pay2bid.client.observable.INewAuctionObservable;
 import com.alma.pay2bid.client.observable.INewPriceObservable;
+import com.alma.pay2bid.client.observable.ITimerObservable;
+import com.alma.pay2bid.client.observer.ITimerObserver;
 import com.alma.pay2bid.server.IServer;
 import com.alma.pay2bid.client.observer.IBidSoldObserver;
 import com.alma.pay2bid.client.observer.INewAuctionObserver;
@@ -19,7 +21,9 @@ import java.util.logging.Logger;
  * @author Thomas Minier
  * @date 27/09/16
  */
-public class Client extends UnicastRemoteObject implements IClient, IBidSoldObservable, INewAuctionObservable, INewPriceObservable {
+public class Client extends UnicastRemoteObject implements IClient, IBidSoldObservable, INewAuctionObservable, INewPriceObservable , ITimerObservable{
+
+
 
     private class TimerManager extends TimerTask {
         public String timeString;
@@ -34,11 +38,13 @@ public class Client extends UnicastRemoteObject implements IClient, IBidSoldObse
         public void run() {
             try {
                 time -=TIME_TO_REFRESH;
-                timeString = Long.toString(time);
+                timeString = Long.toString(time/1000);
                 if(time == 0) {
                     server.timeElapsed(Client.this);
                 }else{
-
+                    for(ITimerObserver o : newTimerObservers){
+                        o.updateTimer(timeString);
+                    }
                 }
             } catch (RemoteException e) {
                 e.printStackTrace();
@@ -63,6 +69,7 @@ public class Client extends UnicastRemoteObject implements IClient, IBidSoldObse
     private ClientState state;
 
     // collections of observers used to connect the client to the GUI
+    private transient Collection<ITimerObserver> newTimerObservers = new ArrayList<ITimerObserver>();
     private transient Collection<IBidSoldObserver> bidSoldObservers = new ArrayList<IBidSoldObserver>();
     private transient Collection<INewAuctionObserver> newAuctionObservers = new ArrayList<INewAuctionObserver>();
     private transient Collection<INewPriceObserver> newPriceObservers = new ArrayList<INewPriceObserver>();
@@ -226,5 +233,15 @@ public class Client extends UnicastRemoteObject implements IClient, IBidSoldObse
     @Override
     public boolean removeNewAuctionObserver(INewAuctionObserver observer) {
         return newAuctionObservers.remove(observer);
+    }
+
+    @Override
+    public boolean addTimerObserver(ITimerObserver observer) {
+        return newTimerObservers.add(observer);
+    }
+
+    @Override
+    public boolean removeTimerObserver(ITimerObserver observer) {
+        return newTimerObservers.remove(observer);
     }
 }

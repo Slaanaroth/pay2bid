@@ -6,6 +6,7 @@ import com.alma.pay2bid.client.IClient;
 import com.alma.pay2bid.client.observer.IBidSoldObserver;
 import com.alma.pay2bid.client.observer.INewAuctionObserver;
 import com.alma.pay2bid.client.observer.INewPriceObserver;
+import com.alma.pay2bid.client.observer.ITimerObserver;
 import com.alma.pay2bid.gui.listeners.RaiseBidButtonListener;
 import com.alma.pay2bid.gui.listeners.AuctionInputListener;
 import com.alma.pay2bid.server.IServer;
@@ -63,6 +64,8 @@ public class ClientGui {
                 addAuctionPanel(auction);
             }
         });
+
+
         // paint the GUI
         createGui();
     }
@@ -157,6 +160,14 @@ public class ClientGui {
                     auction.enable();
                 }
             });
+
+            client.addTimerObserver(new ITimerObserver() {
+                @Override
+                public void updateTimer(String time) {
+                    auction.setAuctionTimer(time);
+                }
+            });
+
 
             client.addBidSoldObserver(new IBidSoldObserver() {
                 @Override
