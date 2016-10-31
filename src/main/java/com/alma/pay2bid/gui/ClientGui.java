@@ -43,11 +43,6 @@ public class ClientGui {
     private JPanel auctionPanel;
 
     /**
-     * Frame to create new auction
-     */
-    private JFrame auctionFrame;
-
-    /**
      * Constructor
      * @param client
      */
@@ -161,18 +156,22 @@ public class ClientGui {
                 }
             });
 
+            // Add a observer to receive the notification when the bid is sold
+            client.addBidSoldObserver(new IBidSoldObserver() {
+                @Override
+                public void updateBidSold(IClient client) {
+                    try {
+                        auction.setWinner(client.getName());
+                    } catch (RemoteException e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+
             client.addTimerObserver(new ITimerObserver() {
                 @Override
                 public void updateTimer(String time) {
                     auction.setAuctionTimer(time);
-                }
-            });
-
-
-            client.addBidSoldObserver(new IBidSoldObserver() {
-                @Override
-                public void updateBidSold(IClient client) {
-                    auction.disable();
                 }
             });
 
@@ -210,22 +209,6 @@ public class ClientGui {
     public void newAuctionView() {
         AuctionInput input = new AuctionInput(client);
         input.showFrame();
-    }
-
-    /**
-     *
-     * @return
-     */
-    public JFrame getAuctionFrame() {
-        return auctionFrame;
-    }
-
-    /**
-     *
-     * @return
-     */
-    public JLabel getStatusLabel() {
-        return statusLabel;
     }
 
     /**

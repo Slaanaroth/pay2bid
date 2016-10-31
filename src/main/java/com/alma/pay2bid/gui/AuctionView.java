@@ -53,8 +53,6 @@ public class AuctionView {
         auctionTimer.setLabelFor(auctionTimerLabel);
         auctionPanel.add(auctionTimerLabel);
         auctionPanel.add(auctionTimer);
-
-
     }
 
     public void enable() {
@@ -67,6 +65,12 @@ public class AuctionView {
         // remove the input elements
         auctionBid.setVisible(false);
         auctionBidLabel.setVisible(false);
+        raiseButton.setVisible(false);
+    }
+
+    public void setWinner(String name) {
+        auctionBidLabel.setText("Winner : " + name);
+        auctionBid.setVisible(false);
         raiseButton.setVisible(false);
     }
 

@@ -48,4 +48,27 @@
             </plugin>
         </plugins>
     </build>
+
+    <developers>
+        <developer>
+            <name>Alexis Giraudet</name>
+        </developer>
+        <developer>
+            <name>Arnaud Grall</name>
+        </developer>
+        <developer>
+            <name>Thomas Minier</name>
+        </developer>
+    </developers>
+
+    <organization>
+        <name>Master ALMA - Architectures Logicielles</name>
+    </organization>
+
+    <licenses>
+        <license>
+            <name>The MIT License</name>
+            <url>https://opensource.org/licenses/MIT</url>
+        </license>
+    </licenses>
 </project>

@@ -18,7 +18,7 @@ public class AuctionInputListener implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent actionEvent) {
         String command = actionEvent.getActionCommand();
-        if("newAuction".equals(command) && (gui.getAuctionFrame() == null))  {
+        if("newAuction".equals(command))  {
             gui.newAuctionView();
         }
     }
