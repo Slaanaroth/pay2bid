@@ -7,14 +7,13 @@
     <groupId>pay2bid</groupId>
     <artifactId>pay2bid</artifactId>
     <version>1.0-SNAPSHOT</version>
-    <dependencies>
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>RELEASE</version>
-            <scope>test</scope>
-        </dependency>
 
+    <properties>
+        <java.version>1.6</java.version>
+        <project.main>com.alma.pay2bid.Main</project.main>
+    </properties>
+
+    <dependencies>
         <dependency>
             <groupId>commons-cli</groupId>
             <artifactId>commons-cli</artifactId>
@@ -29,8 +28,8 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.5.1</version>
                 <configuration>
-                    <source>1.6</source>
-                    <target>1.6</target>
+                    <source>${java.version}</source>
+                    <target>${java.version}</target>
                 </configuration>
             </plugin>
 
@@ -39,7 +38,7 @@
                 <configuration>
                     <archive>
                         <manifest>
-                            <mainClass>com.alma.pay2bid.Main</mainClass>
+                            <mainClass>${project.main}</mainClass>
                         </manifest>
                     </archive>
                     <descriptorRefs>
