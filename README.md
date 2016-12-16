@@ -1,5 +1,5 @@
 # Middleware Project - Pay2bid
-Distributed auction house application - Middleware project, M2 ALMA 2016/2017
+Distributed auction house application - Middleware project, M2 ALMA 2016/2017   
 **Auteurs** : Alexis Giraudet, Arnaud Grall, Thomas Minier
 
 # Prerequisites
