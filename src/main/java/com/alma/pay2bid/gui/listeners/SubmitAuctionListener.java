@@ -2,14 +2,17 @@ package com.alma.pay2bid.gui.listeners;
 
 import com.alma.pay2bid.bean.AuctionBean;
 import com.alma.pay2bid.client.IClient;
-import com.alma.pay2bid.gui.AuctionView;
 import com.alma.pay2bid.gui.AuctionInput;
+import com.alma.pay2bid.gui.AuctionView;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 /**
- * Created by Folkvir on 02/10/2016.
+ * An ActionListener that submit a new auction to the server
+ * @author Alexis Giraudet
+ * @author Arnaud Grall
+ * @author Thomas Minier
  */
 public class SubmitAuctionListener implements ActionListener{
     private AuctionView auction;
@@ -23,7 +26,6 @@ public class SubmitAuctionListener implements ActionListener{
 
     @Override
     public void actionPerformed(ActionEvent actionEvent) {
-        System.out.println("actionPerformed into SubmitAuctionListener");
         try {
             // send the new auction to the server through the client
             AuctionBean a = new AuctionBean(Integer.parseInt(input.getAuctionPrice()), input.getAuctionName(), input.getDescription());

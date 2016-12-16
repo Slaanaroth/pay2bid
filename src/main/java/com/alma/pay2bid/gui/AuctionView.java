@@ -4,36 +4,34 @@ import com.alma.pay2bid.bean.AuctionBean;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.UUID;
 
 /**
- * Created by Folkvir on 02/10/2016.
+ * The widget used to display an auction
+ * @author Alexis Giraudet
+ * @author Arnaud Grall
+ * @author Thomas Minier
  */
 public class AuctionView {
-    AuctionBean auction;
 
     /**
      * Properties for the main panel
      */
     private JPanel auctionPanel;
-    private JLabel auctionPriceLabel;
     private JLabel auctionPriceValue;
     private JLabel auctionTimer;
-    private JLabel auctionTimerLabel;
     private JTextField auctionBid;
     private JLabel auctionBidLabel;
     private JButton raiseButton;
 
-    public AuctionView(AuctionBean a){
-        auction = a;
+    public AuctionView(AuctionBean auction){
         auctionPanel = new JPanel();
         auctionPanel.setMaximumSize(new Dimension(500, 150));
         auctionPanel.setLayout(new GridLayout(4, 3, 5, 5));
 
         // Create the price label
-        auctionPriceLabel = new JLabel(" Price : ");
+        JLabel auctionPriceLabel = new JLabel(" Price : ");
         auctionPriceValue = new JLabel("");
-        auctionPriceValue.setText(Integer.toString(a.getPrice()));
+        auctionPriceValue.setText(Integer.toString(auction.getPrice()));
         auctionPriceValue.setLabelFor(auctionPriceLabel);
         auctionPanel.add(auctionPriceLabel);
         auctionPanel.add(auctionPriceValue);
@@ -45,11 +43,11 @@ public class AuctionView {
         auctionBidLabel.setLabelFor(auctionBid);
         auctionPanel.add(auctionBidLabel);
         auctionPanel.add(auctionBid);
-        auctionPanel.setBorder(BorderFactory.createTitledBorder(a.getName()));
+        auctionPanel.setBorder(BorderFactory.createTitledBorder(auction.getName()));
 
         //Create the timer label
         auctionTimer = new JLabel("0");
-        auctionTimerLabel = new JLabel("Remaining time : ");
+        JLabel auctionTimerLabel = new JLabel("Remaining time : ");
         auctionTimer.setLabelFor(auctionTimerLabel);
         auctionPanel.add(auctionTimerLabel);
         auctionPanel.add(auctionTimer);

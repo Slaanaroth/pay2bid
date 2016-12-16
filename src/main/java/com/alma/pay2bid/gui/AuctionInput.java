@@ -7,20 +7,18 @@ import javax.swing.*;
 import java.awt.*;
 
 /**
+ * An input widget used to create a new auction
+ * @author Alexis Giraudet
+ * @author Arnaud Grall
  * @author Thomas Minier
- * @date 13/10/16
  */
 public class AuctionInput extends JPanel {
 
     private JFrame auctionFrame;
-    private JLabel nameLabel;
     private JTextField  name;
-    private JLabel priceLabel;
     public JTextField  price;
-    private JLabel descriptionLabel;
     private JTextField  description;
     private JLabel statusLabel;
-    private final JButton auctionSend;
 
     public AuctionInput(IClient client) {
         setLayout(new GridLayout(4,3,5,5));
@@ -32,17 +30,17 @@ public class AuctionInput extends JPanel {
         auctionFrame.setResizable(false);
 
         // Field "Name"
-        nameLabel = new JLabel("Name : ");
+        JLabel nameLabel = new JLabel("Name : ");
         name = new JTextField();
         nameLabel.setLabelFor(name);
 
         // Field "Price"
-        priceLabel = new JLabel("Price : ");
+        JLabel priceLabel = new JLabel("Price : ");
         price = new JTextField();
         priceLabel.setLabelFor(price);
 
         // Field "Description"
-        descriptionLabel = new JLabel("Description : ");
+        JLabel descriptionLabel = new JLabel("Description : ");
         description = new JTextField();
         descriptionLabel.setLabelFor(description);
 
@@ -50,7 +48,7 @@ public class AuctionInput extends JPanel {
         statusLabel = new JLabel("", JLabel.CENTER);
 
         // Validation button
-        auctionSend = new JButton("SEND NEW AUCTION");
+        JButton auctionSend = new JButton("SEND NEW AUCTION");
         auctionSend.setActionCommand("newAuction");
         auctionSend.addActionListener(new SubmitAuctionListener(client, this));
 

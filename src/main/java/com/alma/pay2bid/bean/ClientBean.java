@@ -3,8 +3,10 @@ package com.alma.pay2bid.bean;
 import java.util.UUID;
 
 /**
+ * ClientBean represent the identity of a client
  * @author Alexis Giraudet
- * @date 11/10/16
+ * @author Arnaud Grall
+ * @author Thomas Minier
  */
 public class ClientBean implements IBean {
     private UUID uuid;

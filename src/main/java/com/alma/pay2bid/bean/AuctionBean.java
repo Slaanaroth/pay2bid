@@ -3,7 +3,10 @@ package com.alma.pay2bid.bean;
 import java.util.UUID;
 
 /**
- *
+ * AuctionBean represent an auction, ie an item sold by a client
+ * @author Alexis Giraudet
+ * @author Arnaud Grall
+ * @author Thomas Minier
  */
 public class AuctionBean implements IBean {
     private UUID uuid;

@@ -10,8 +10,10 @@ import java.util.*;
 import java.util.logging.Logger;
 
 /**
+ * A Server handle the clients in our model and orchestrate the auction house
+ * @author Alexis Giraudet
+ * @author Arnaud Grall
  * @author Thomas Minier
- * @date 27/09/16
  */
 public class Server extends UnicastRemoteObject implements IServer {
 
@@ -36,7 +38,7 @@ public class Server extends UnicastRemoteObject implements IServer {
     }
 
     private static final Logger LOGGER = Logger.getLogger(Server.class.getCanonicalName());
-    private static final long CHECK_CONN_DELAY = 30000; // TODO : set a more accurate value for this @Thomas
+    private static final long CHECK_CONN_DELAY = 30000;
 
     private boolean auctionInProgress = false;
     private AuctionBean currentAuction;
@@ -48,6 +50,10 @@ public class Server extends UnicastRemoteObject implements IServer {
 
     private static final int MIN_NUMBER_CLIENTS = 1;
 
+    /**
+     * Constructor
+     * @throws RemoteException
+     */
     public Server() throws RemoteException {
         super();
         Timer daemonTimer = new Timer();
@@ -55,7 +61,7 @@ public class Server extends UnicastRemoteObject implements IServer {
     }
 
     /**
-     *
+     * Launch a new auction
      */
     private void launchAuction() throws RemoteException {
         auctionInProgress = true;
@@ -71,6 +77,7 @@ public class Server extends UnicastRemoteObject implements IServer {
     }
 
     /**
+     * Submit a new auction in the auction's queue
      * @param auction
      * @throws RemoteException
      */
@@ -86,6 +93,7 @@ public class Server extends UnicastRemoteObject implements IServer {
     }
 
     /**
+     * Register a new client. If there is an auction in progress, the client will have to wait until its end.
      * @param client
      * @throws RemoteException
      */
@@ -103,7 +111,7 @@ public class Server extends UnicastRemoteObject implements IServer {
     }
 
     /**
-     *
+     * Disconnect a client from the server
      * @param client
      * @throws RemoteException
      */
@@ -114,7 +122,7 @@ public class Server extends UnicastRemoteObject implements IServer {
     }
 
     /**
-     *
+     * Validate and flush all waiting registrations
      */
     private synchronized void validateRegistrations() {
         auctionInProgress = false;
@@ -122,20 +130,22 @@ public class Server extends UnicastRemoteObject implements IServer {
     }
 
     /**
+     * Raise the bid on an item
      * @param client
      * @param newBid
      * @throws RemoteException
      */
     @Override
     public synchronized void raiseBid(IClient client, int newBid) throws RemoteException {
-        if(client.getState() == ClientState.WAITING) {
+        if((client.getState() == ClientState.WAITING) && (newBid > currentAuction.getPrice())) {
             bidByClient.put(client, newBid);
             client.setState(ClientState.RAISING);
             LOGGER.info("New bid '" + newBid + "' placed by client " + client.toString());
-        } // TODO : else throw a exception ? @Thomas
+        }
     }
 
     /**
+     * Notifies the server that a client's timer has reach zero.
      * @param client
      * @throws RemoteException
      * @throws InterruptedException
@@ -167,6 +177,7 @@ public class Server extends UnicastRemoteObject implements IServer {
                         winner = pair.getKey();
                     }
                 }
+                currentAuction.setPrice(maxBid);
                 LOGGER.info("End of a round. Bid = " + maxBid + " - The current winner is " + client.toString());
 
                 // clean the data structures before the next round

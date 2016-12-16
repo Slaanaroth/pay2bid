@@ -7,8 +7,8 @@ import com.alma.pay2bid.client.observer.IBidSoldObserver;
 import com.alma.pay2bid.client.observer.INewAuctionObserver;
 import com.alma.pay2bid.client.observer.INewPriceObserver;
 import com.alma.pay2bid.client.observer.ITimerObserver;
-import com.alma.pay2bid.gui.listeners.RaiseBidButtonListener;
 import com.alma.pay2bid.gui.listeners.AuctionInputListener;
+import com.alma.pay2bid.gui.listeners.RaiseBidButtonListener;
 import com.alma.pay2bid.server.IServer;
 
 import javax.swing.*;
@@ -25,7 +25,10 @@ import java.util.logging.Logger;
 import static java.lang.System.exit;
 
 /**
- * Created by Folkvir(Grall Arnaud)) on 28/09/16.
+ * The main GUI of the application client-side
+ * @author Alexis Giraudet
+ * @author Arnaud Grall
+ * @author Thomas Minier
  */
 public class ClientGui {
 
@@ -59,8 +62,6 @@ public class ClientGui {
                 addAuctionPanel(auction);
             }
         });
-
-
         // paint the GUI
         createGui();
     }
@@ -209,22 +210,5 @@ public class ClientGui {
     public void newAuctionView() {
         AuctionInput input = new AuctionInput(client);
         input.showFrame();
-    }
-
-    /**
-     * Main loop which run the client
-     * @param args
-     */
-    public static void main(String[] args) throws RemoteException, InterruptedException, NotBoundException {
-        //TODO: parameterize host/port
-        IServer server = (IServer) LocateRegistry.getRegistry("localhost", 1099).lookup("com.alma.pay2bid.server.Server");
-        Client client = new Client(server, "Arnaud");
-        Client client2 = new Client(server, "Thomas");
-
-        ClientGui c = new ClientGui(client, server);
-        ClientGui c2 = new ClientGui(client2, server);
-
-        c.show();
-        c2.show();
     }
 }

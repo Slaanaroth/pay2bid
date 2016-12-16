@@ -10,7 +10,10 @@ import java.awt.event.ActionListener;
 import java.rmi.RemoteException;
 
 /**
- * ACTION LISTENER FOR BUTTON
+ * An ActionListener called to raise the bid of an item
+ * @author Alexis Giraudet
+ * @author Arnaud Grall
+ * @author Thomas Minier
  */
 public class RaiseBidButtonListener implements ActionListener {
     private IClient client;

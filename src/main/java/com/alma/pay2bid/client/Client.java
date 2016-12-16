@@ -6,11 +6,11 @@ import com.alma.pay2bid.client.observable.IBidSoldObservable;
 import com.alma.pay2bid.client.observable.INewAuctionObservable;
 import com.alma.pay2bid.client.observable.INewPriceObservable;
 import com.alma.pay2bid.client.observable.ITimerObservable;
-import com.alma.pay2bid.client.observer.ITimerObserver;
-import com.alma.pay2bid.server.IServer;
 import com.alma.pay2bid.client.observer.IBidSoldObserver;
 import com.alma.pay2bid.client.observer.INewAuctionObserver;
 import com.alma.pay2bid.client.observer.INewPriceObserver;
+import com.alma.pay2bid.client.observer.ITimerObserver;
+import com.alma.pay2bid.server.IServer;
 
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
@@ -18,17 +18,19 @@ import java.util.*;
 import java.util.logging.Logger;
 
 /**
+ * A Client a client that interact with a server running an Auction House
+ * @author Alexis Giraudet
+ * @author Arnaud Grall
  * @author Thomas Minier
- * @date 27/09/16
  */
 public class Client extends UnicastRemoteObject implements IClient, IBidSoldObservable, INewAuctionObservable, INewPriceObservable , ITimerObservable{
 
-
-
+    /**
+     * A timer used to measure time between rounds
+     */
     private class TimerManager extends TimerTask {
-        public String timeString;
+        private String timeString;
         private long time = TIME_TO_RAISE_BID;
-        private Timer timer;
 
         public TimerManager(String timeMessage){
             this.timeString = timeMessage;
@@ -41,7 +43,7 @@ public class Client extends UnicastRemoteObject implements IClient, IBidSoldObse
                 timeString = Long.toString(time/1000);
                 if(time == 0) {
                     server.timeElapsed(Client.this);
-                }else{
+                } else {
                     for(ITimerObserver o : newTimerObservers){
                         o.updateTimer(timeString);
                     }
@@ -52,16 +54,22 @@ public class Client extends UnicastRemoteObject implements IClient, IBidSoldObse
                 e.printStackTrace();
             }
         }
+
+        public String getTimeString() {
+            return timeString;
+        }
+
+        public void setTimeString(String timeString) {
+            this.timeString = timeString;
+        }
     }
 
     private static final Logger LOGGER = Logger.getLogger(Client.class.getCanonicalName());
-    //TODO: move all constants/configs in Config class
     private static final long TIME_TO_RAISE_BID = 30000;
     private static final long TIME_TO_REFRESH = 1000;
 
     private ClientBean identity;
     private IServer server;
-    //TODO: use ExecutorService instead of Timer ?
     private transient Timer timer;
     private AuctionBean currentAuction;
     private String name;
@@ -93,15 +101,12 @@ public class Client extends UnicastRemoteObject implements IClient, IBidSoldObse
     }
 
     /**
+     * Register a new auction
      * @param auction
      * @throws RemoteException
      */
     @Override
     public void newAuction(AuctionBean auction) throws RemoteException {
-        /*if(auction == null) {
-            throw new Exception();
-        }*/
-
         LOGGER.info("New auction received from the server");
 
         currentAuction = auction;
@@ -118,30 +123,24 @@ public class Client extends UnicastRemoteObject implements IClient, IBidSoldObse
     }
 
     /**
+     * Submit a new auction to the server
      * @param auction
      * @throws RemoteException
      */
     @Override
     public void submit(AuctionBean auction) throws RemoteException {
-        /*if (auction == null) {
-            throw new Exception();
-        }*/
-
         LOGGER.info("New auction submitted to the server");
 
         server.placeAuction(auction);
     }
 
     /**
+     * An item has been sold to a client
      * @param buyer
      * @throws RemoteException
      */
     @Override
     public void bidSold(IClient buyer) throws RemoteException {
-        /*if(currentAuction == null) {
-            throw new Exception();
-        }*/
-
         LOGGER.info((buyer == null ? "nobody" : buyer.getName()) + " won " + currentAuction.getName());
 
         currentAuction = null;
@@ -158,16 +157,13 @@ public class Client extends UnicastRemoteObject implements IClient, IBidSoldObse
     }
 
     /**
+     * Update the price of an item
      * @param auctionID
      * @param price
      * @throws RemoteException
      */
     @Override
     public void newPrice(UUID auctionID, int price) throws RemoteException {
-        /*if(currentAuction == null) {
-            throw new Exception();
-        }*/
-
         LOGGER.info("New price received for the current auction");
 
         currentAuction.setPrice(price);

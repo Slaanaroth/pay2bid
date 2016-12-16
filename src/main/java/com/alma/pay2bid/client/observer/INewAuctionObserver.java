@@ -3,9 +3,11 @@ package com.alma.pay2bid.client.observer;
 import com.alma.pay2bid.bean.AuctionBean;
 
 /**
+ * An observer notified when a new auction has begun
+ * @author Alexis Giraudet
+ * @author Arnaud Grall
  * @author Thomas Minier
- * @date 03/10/16
  */
-public interface INewAuctionObserver /*extends IObserver<AuctionBean>*/ {
+public interface INewAuctionObserver {
     void updateNewAuction(AuctionBean auction);
 }

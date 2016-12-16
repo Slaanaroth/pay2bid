@@ -1,13 +1,13 @@
 package com.alma.pay2bid.client.observer;
 
-import com.alma.pay2bid.bean.AuctionBean;
-
 import java.util.UUID;
 
 /**
+ * An observer notified when an item has a new price
+ * @author Alexis Giraudet
+ * @author Arnaud Grall
  * @author Thomas Minier
- * @date 03/10/16
  */
-public interface INewPriceObserver /*extends IObserver<Integer>*/ {
+public interface INewPriceObserver {
     void updateNewPrice(UUID auctionID, Integer price);
 }

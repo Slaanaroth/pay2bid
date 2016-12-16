@@ -1,11 +1,11 @@
 package com.alma.pay2bid.client.observer;
 
-import com.alma.pay2bid.client.IClient;
-
 /**
+ * An observer notified when a timer has been updated
+ * @author Alexis Giraudet
+ * @author Arnaud Grall
  * @author Thomas Minier
- * @date 03/10/16
  */
-public interface ITimerObserver /*extends IObserver<IClient>*/ {
+public interface ITimerObserver {
     void updateTimer(String time);
 }

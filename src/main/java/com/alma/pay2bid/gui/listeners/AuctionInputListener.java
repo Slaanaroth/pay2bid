@@ -6,7 +6,10 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 /**
- * TEST ACTION LISTENER FOR NEW AUCTION
+ * An ActionListener called to display an input widget used to create an new auction
+ * @author Alexis Giraudet
+ * @author Arnaud Grall
+ * @author Thomas Minier
  */
 public class AuctionInputListener implements ActionListener {
     private ClientGui gui;

@@ -1,10 +1,6 @@
 package com.alma.pay2bid.client;
 
 import com.alma.pay2bid.bean.AuctionBean;
-import com.alma.pay2bid.bean.ClientBean;
-import com.alma.pay2bid.client.observer.IBidSoldObserver;
-import com.alma.pay2bid.client.observer.INewAuctionObserver;
-import com.alma.pay2bid.client.observer.INewPriceObserver;
 
 import java.io.Serializable;
 import java.rmi.Remote;
@@ -12,7 +8,10 @@ import java.rmi.RemoteException;
 import java.util.UUID;
 
 /**
- *
+ * The Interface of a client in our model
+ * @author Alexis Giraudet
+ * @author Arnaud Grall
+ * @author Thomas Minier
  */
 public interface IClient extends Remote, Serializable {
     /**

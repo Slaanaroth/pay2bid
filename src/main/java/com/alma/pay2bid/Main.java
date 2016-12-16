@@ -11,8 +11,10 @@ import java.rmi.registry.Registry;
 import java.util.logging.Logger;
 
 /**
+ * The Main application
  * @author Alexis Giraudet
- * @date 11/10/16
+ * @author Arnaud Grall
+ * @author Thomas Minier
  */
 public class Main {
     private static final Logger LOGGER = Logger.getLogger(Server.class.getCanonicalName());
@@ -20,14 +22,11 @@ public class Main {
     private static void startClient(String host, int port) {
         try {
             IServer server = (IServer) LocateRegistry.getRegistry(host, port).lookup("com.alma.pay2bid.server.Server");
-            Client client = new Client(server, "Arnaud");
-            Client client2 = new Client(server, "Thomas");
+            Client client = new Client(server, "Client " + host);
 
             ClientGui c = new ClientGui(client, server);
-            ClientGui c2 = new ClientGui(client2, server);
 
             c.show();
-            c2.show();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -57,7 +56,7 @@ public class Main {
         options.addOption("p", "daemon", false, "port");
 
         CommandLineParser parser = new DefaultParser();
-        CommandLine cmd = parser.parse( options, args);
+        CommandLine cmd = parser.parse(options, args);
 
         String host = "localhost";
         int port = 1099;

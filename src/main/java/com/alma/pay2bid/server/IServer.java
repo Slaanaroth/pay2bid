@@ -7,6 +7,9 @@ import java.rmi.Remote;
 import java.rmi.RemoteException;
 
 /**
+ * The interface that specifies the actions of a server in our model
+ * @author Alexis Giraudet
+ * @author Arnaud Grall
  * @author Thomas Minier
  */
 public interface IServer extends Remote {
