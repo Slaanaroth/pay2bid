@@ -11,6 +11,7 @@ Distributed auction house application - Middleware project, M2 ALMA 2016/2017
 Navigate into the project directory and build it using Maven
 ```
 cd pay2bid/
+mvn package
 mvn assembly:single
 ```
 
