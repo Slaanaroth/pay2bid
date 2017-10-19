@@ -229,6 +229,13 @@ public class ClientGui {
         //UPDATE AUCTION IN OUR LIST
         auction.setPrice(newPrice);
 
+          //update the current winner
+        try {
+          auction.setCurrentWinner(server.getWinner().getName());
+        } catch (RemoteException e){
+            e.printStackTrace();
+        }
+
         //RELOAD THE MAIN PANEL
         auction.getAuctionPanel().revalidate();
         auction.getAuctionPanel().repaint();

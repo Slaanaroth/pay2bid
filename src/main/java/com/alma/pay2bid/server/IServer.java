@@ -41,4 +41,6 @@ public interface IServer extends Remote {
      * @throws InterruptedException
      */
     void timeElapsed(IClient client) throws RemoteException, InterruptedException;
+
+    IClient getWinner() throws RemoteException;
 }

@@ -19,14 +19,16 @@ public class AuctionView {
     private JPanel auctionPanel;
     private JLabel auctionPriceValue;
     private JLabel auctionTimer;
+    private JLabel auctionCurrentWinnerLabel;
+    private JLabel auctionCurrentWinnerValue;
     private JTextField auctionBid;
     private JLabel auctionBidLabel;
     private JButton raiseButton;
 
     public AuctionView(AuctionBean auction){
         auctionPanel = new JPanel();
-        auctionPanel.setMaximumSize(new Dimension(500, 150));
-        auctionPanel.setLayout(new GridLayout(4, 3, 5, 5));
+        auctionPanel.setMaximumSize(new Dimension(500, 200));
+        auctionPanel.setLayout(new GridLayout(7, 3, 5, 5));
 
         // Create the price label
         JLabel auctionPriceLabel = new JLabel(" Price : ");
@@ -35,6 +37,21 @@ public class AuctionView {
         auctionPriceValue.setLabelFor(auctionPriceLabel);
         auctionPanel.add(auctionPriceLabel);
         auctionPanel.add(auctionPriceValue);
+
+        // Create the currentWinner label
+        auctionCurrentWinnerLabel = new JLabel(" Current Winner is : ");
+        auctionCurrentWinnerValue = new JLabel("Wait the second turn !");
+        auctionCurrentWinnerValue.setText("Wait the second turn !");
+        auctionCurrentWinnerValue.setLabelFor(auctionCurrentWinnerLabel);
+        auctionPanel.add(auctionCurrentWinnerLabel);
+        auctionPanel.add(auctionCurrentWinnerValue);
+
+        //Create the timer label
+        auctionTimer = new JLabel("0");
+        JLabel auctionTimerLabel = new JLabel("Remaining time : ");
+        auctionTimer.setLabelFor(auctionTimerLabel);
+        auctionPanel.add(auctionTimerLabel);
+        auctionPanel.add(auctionTimer);
 
         // Create the bid field
         auctionBid = new JTextField("", JLabel.TRAILING);
@@ -45,12 +62,11 @@ public class AuctionView {
         auctionPanel.add(auctionBid);
         auctionPanel.setBorder(BorderFactory.createTitledBorder(auction.getName()));
 
-        //Create the timer label
-        auctionTimer = new JLabel("0");
-        JLabel auctionTimerLabel = new JLabel("Remaining time : ");
-        auctionTimer.setLabelFor(auctionTimerLabel);
-        auctionPanel.add(auctionTimerLabel);
-        auctionPanel.add(auctionTimer);
+
+    }
+
+    public void setCurrentWinner(String name) {
+      auctionCurrentWinnerValue.setText(name);
     }
 
     public void enable() {
@@ -68,13 +84,15 @@ public class AuctionView {
 
     public void setWinner(String name) {
         auctionBidLabel.setText("Winner : " + name);
+        auctionCurrentWinnerLabel.setVisible(false);
+        auctionCurrentWinnerValue.setVisible(false);
         auctionBid.setVisible(false);
         raiseButton.setVisible(false);
     }
 
     public void setRaiseButton(JButton raiseButton) {
         this.raiseButton = raiseButton;
-        auctionPanel.add(raiseButton, 6);
+        auctionPanel.add(raiseButton);
     }
 
     public void setPrice(int newPrice){
