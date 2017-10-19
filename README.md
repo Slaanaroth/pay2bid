@@ -30,7 +30,7 @@ java -jar target/pay2bid-1.0-SNAPSHOT-jar-with-dependencies.jar
 
 - [ ] Le client proposant l'enchère ne devrait pas pouvoir bid sur celle-ci
 - [x] identificateurs pour les ≠ clients
-- [ ] séparation par thèmes
+- [ ] séparation par thèmes
 - [ ] qui gagne en cas d'égalité
 - [x] enchère négatives permises
 - [ ] anciennes enchères se relancent avec les nouvelles --> fieldtext de l'ancienne enchère réapparait
