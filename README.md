@@ -24,3 +24,15 @@ java -jar target/pay2bid-1.0-SNAPSHOT-jar-with-dependencies.jar -l
 ```
 java -jar target/pay2bid-1.0-SNAPSHOT-jar-with-dependencies.jar
 ```
+
+#TO DO
+
+- Le client proposant l'enchère ne devrait pas pouvoir bid sur celle-ci
+- identificateurs pour les ≠ clients
+- séparation par thèmes
+- qui gagne en cas d'égalité , qui a placé la dernière mise gagnante
+- enchère négatives permises
+- anciennes enchères se relancent avec les nouvelles
+- finir l'enchère quand tout le monde a bid sans attendre fin du timer
+- gestion des déconnexions pendant enchère
+- durant l'enchère on ne sait pas qui l'emporte
