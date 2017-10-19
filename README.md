@@ -36,3 +36,5 @@ java -jar target/pay2bid-1.0-SNAPSHOT-jar-with-dependencies.jar
 - finir l'enchère quand tout le monde a bid sans attendre fin du timer
 - gestion des déconnexions pendant enchère
 - durant l'enchère on ne sait pas qui l'emporte
+- horloge des ≠ enchères ne doivent pas se synchro entres elles
+- erreur si personne ne bid
