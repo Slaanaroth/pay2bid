@@ -80,14 +80,35 @@ public class ClientGui {
         mainFrame.setMaximumSize(dimension);
         mainFrame.setLayout(new BorderLayout());
 
-        String name = JOptionPane.showInputDialog("What is your name?");
-        JOptionPane.showMessageDialog(mainFrame, "Hello " + name + '!');
+        // block pour définir le nom du client
+        boolean hasName = false;
+        String[] options = {"OK"};
+        JPanel panel = new JPanel();
+        JLabel lbl = new JLabel("Entrez votre nom: ");
+        JTextField txt = new JTextField(10);
+        panel.add(lbl);
+        panel.add(txt);
 
-        try {
-          client.setName(name);
-        } catch (RemoteException e) {
-          e.printStackTrace();
+        while (hasName == false) {
+
+        int selectedOption = JOptionPane.showOptionDialog(null, panel, "", JOptionPane.NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, options , options[0]);
+
+        if(selectedOption == 0)
+        {
+        String text = txt.getText();
+          if (text.length() > 1 ) {
+            hasName = true;
+            try {
+              client.setName(text);
+            } catch (RemoteException e) {
+              e.printStackTrace();
+            }
+            JOptionPane.showMessageDialog(mainFrame, "Bonjour " + text + '!');
+          }
         }
+      }
+
+
 
 
         mainFrame.addWindowListener(new WindowAdapter() {
