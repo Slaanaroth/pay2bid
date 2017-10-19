@@ -37,5 +37,5 @@ java -jar target/pay2bid-1.0-SNAPSHOT-jar-with-dependencies.jar
 - [ ] finir l'enchère quand tout le monde a bid sans attendre fin du timer
 - [ ] gestion des déconnexions pendant enchère --> timeElapsed non appelé par le client qui se déconnecte, l'enchère ne s'arrête jamais
 - [ ] durant l'enchère on ne sait pas qui l'emporte
-- [ ] erreur si personne ne bid
+- [ ] erreur si personne ne bid au premier tour
 - [ ] correction options host et port
