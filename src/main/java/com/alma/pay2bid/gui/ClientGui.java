@@ -15,6 +15,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
@@ -77,6 +79,16 @@ public class ClientGui {
         mainFrame.setSize(500, 500);
         mainFrame.setMaximumSize(dimension);
         mainFrame.setLayout(new BorderLayout());
+
+        String name = JOptionPane.showInputDialog("What is your name?");
+        JOptionPane.showMessageDialog(mainFrame, "Hello " + name + '!');
+
+        try {
+          client.setName(name);
+        } catch (RemoteException e) {
+          e.printStackTrace();
+        }
+
 
         mainFrame.addWindowListener(new WindowAdapter() {
             @Override

@@ -91,12 +91,12 @@ public class Client extends UnicastRemoteObject implements IClient, IBidSoldObse
      * @param name
      * @throws RemoteException
      */
-    public Client(IServer server, String name) throws RemoteException {
+    public Client(IServer server) throws RemoteException {
         super();
 
         identity = new ClientBean(UUID.randomUUID(), name, "default password", name);
         this.server = server;
-        this.name = name;
+        this.name = "inconnu";
         state = ClientState.WAITING;
     }
 
@@ -189,6 +189,11 @@ public class Client extends UnicastRemoteObject implements IClient, IBidSoldObse
     @Override
     public String getName() throws RemoteException {
         return name;
+    }
+
+    @Override
+    public void setName(String name) throws RemoteException {
+        this.name = name;
     }
 
     @Override
