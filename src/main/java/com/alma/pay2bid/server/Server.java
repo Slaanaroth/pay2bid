@@ -34,11 +34,20 @@ public class Server extends UnicastRemoteObject implements IServer {
                 }
             }
             clients.removeAll(clientsToRemove);
+            for (IClient client : clientsToRemove) {
+              try {
+                  timeElapsed(client);
+              } catch (RemoteException e) {
+                  e.printStackTrace();
+              } catch (InterruptedException e) {
+                  e.printStackTrace();
+              }
+            }
         }
     }
 
     private static final Logger LOGGER = Logger.getLogger(Server.class.getCanonicalName());
-    private static final long CHECK_CONN_DELAY = 30000;
+    private static final long CHECK_CONN_DELAY = 5000;
 
     private boolean auctionInProgress = false;
     private AuctionBean currentAuction;
@@ -153,6 +162,7 @@ public class Server extends UnicastRemoteObject implements IServer {
     @Override
     public synchronized void timeElapsed(IClient client) throws RemoteException, InterruptedException {
         nbParticipants--;
+        LOGGER.info("A client time elapsed");
         if (nbParticipants == 0) {
             // case of a blank round : the auction is completed
             if(bidByClient.size() == 0) {
