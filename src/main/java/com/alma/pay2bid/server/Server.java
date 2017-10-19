@@ -192,4 +192,8 @@ public class Server extends UnicastRemoteObject implements IServer {
             }
         }
     }
+
+    public IClient getWinner() throws RemoteException{
+      return winner;
+    }
 }
