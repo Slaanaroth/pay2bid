@@ -31,11 +31,11 @@ java -jar target/pay2bid-1.0-SNAPSHOT-jar-with-dependencies.jar
 - [ ] Le client proposant l'enchère ne devrait pas pouvoir bid sur celle-ci
 - [x] identificateurs pour les ≠ clients
 - [ ] séparation par thèmes
-- [ ] qui gagne en cas d'égalité
+- [x] qui gagne en cas d'égalité -> Random selon le hashcode
 - [x] enchère négatives permises
 - [ ] anciennes enchères se relancent avec les nouvelles --> fieldtext de l'ancienne enchère réapparait
 - [ ] finir l'enchère quand tout le monde a bid sans attendre fin du timer
 - [ ] gestion des déconnexions pendant enchère --> timeElapsed non appelé par le client qui se déconnecte, l'enchère ne s'arrête jamais
-- [ ] durant l'enchère on ne sait pas qui l'emporte
-- [ ] erreur si personne ne bid au premier tour
+- [x] durant l'enchère on ne sait pas qui l'emporte
+- [x] erreur si personne ne bid au premier tour
 - [ ] correction options host et port
