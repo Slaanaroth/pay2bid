@@ -15,7 +15,8 @@ public class AuctionBean implements IBean {
     private String description;
 
     public AuctionBean(int price, String name, String description) {
-        this.price = price;
+    	if (price > 0) this.price = price;
+    	else this.price = 0;
         this.name = name;
         this.description = description;
     }
