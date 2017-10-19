@@ -178,7 +178,8 @@ public class Server extends UnicastRemoteObject implements IServer {
                     }
                 }
                 currentAuction.setPrice(maxBid);
-                LOGGER.info("End of a round. Bid = " + maxBid + " - The current winner is " + client.toString());
+                
+                LOGGER.info("End of a round. Bid = " + maxBid + " - The current winner is " + client.getName());
 
                 // clean the data structures before the next round
                 nbParticipants = clients.size();

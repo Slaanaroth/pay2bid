@@ -152,7 +152,8 @@ public class Client extends UnicastRemoteObject implements IClient, IBidSoldObse
 
         // notify the observers of the new bid
         for (IBidSoldObserver observer : bidSoldObservers) {
-            observer.updateBidSold(buyer);
+        	if(buyer != null)
+        		observer.updateBidSold(buyer);
         }
     }
 
