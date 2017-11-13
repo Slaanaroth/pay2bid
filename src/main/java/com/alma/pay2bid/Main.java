@@ -6,6 +6,7 @@ import com.alma.pay2bid.server.IServer;
 import com.alma.pay2bid.server.Server;
 import org.apache.commons.cli.*;
 
+import java.rmi.ConnectException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.util.logging.Logger;
@@ -27,8 +28,11 @@ public class Main {
             ClientGui c = new ClientGui(client, server);
 
             c.show();
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (Exception  e) {
+        	if(e instanceof ConnectException)
+        		System.out.println("Aucun serveur n'a été démarré !");
+        	else
+        		e.printStackTrace();
         }
     }
 
@@ -78,8 +82,8 @@ public class Main {
             // start the server
             startServer(port, daemon);
         } else {
-            // start client gui
-            startClient(host, port);
+        	// start the client
+        	startClient(host, port);
         }
     }
 }
