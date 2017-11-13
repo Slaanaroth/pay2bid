@@ -12,8 +12,8 @@ Distributed auction house application - Middleware project, M2 ALMA 2016/2017
 Navigate into the project directory and build it using Maven
 ```
 cd pay2bid/
-mvn package
-mvn assembly:single
+mvn compile
+mvn package assembly:single
 ```
 
 # Launch the Server
@@ -39,3 +39,4 @@ java -jar target/pay2bid-1.0-SNAPSHOT-jar-with-dependencies.jar
 - [x] durant l'enchère on ne sait pas qui l'emporte
 - [x] erreur si personne ne bid au premier tour
 - [ ] correction options host et port
+- [ ] catch l'exception lorsque le client est lancé sans serveur
