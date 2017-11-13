@@ -1,5 +1,6 @@
 package com.alma.pay2bid.gui.listeners;
 
+import com.alma.pay2bid.client.Client;
 import com.alma.pay2bid.client.IClient;
 import com.alma.pay2bid.gui.AuctionView;
 import com.alma.pay2bid.server.IServer;
@@ -38,6 +39,11 @@ public class RaiseBidButtonListener implements ActionListener {
             try {
                 server.raiseBid(client, Integer.valueOf(bidField.getText()));
                 auctionView.disable();
+                try {
+					server.timeElapsed(this.client);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
             } catch (RemoteException e) {
                 e.printStackTrace();
             }
