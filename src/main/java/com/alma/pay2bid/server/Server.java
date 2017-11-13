@@ -123,10 +123,17 @@ public class Server extends UnicastRemoteObject implements IServer {
      * Disconnect a client from the server
      * @param client
      * @throws RemoteException
+     * @throws InterruptedException 
      */
     @Override
-    public void disconnect(IClient client) throws RemoteException {
-        LOGGER.info("Disconnect : Client " + client.toString());
+    public void disconnect(IClient client) throws RemoteException, InterruptedException {
+        try {
+			LOGGER.info("Disconnect : Client " + client.toString());
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+        this.timeElapsed(client);
         clients.remove(client);
     }
 
