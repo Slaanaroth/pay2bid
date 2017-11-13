@@ -34,9 +34,9 @@ java -jar target/pay2bid-1.0-SNAPSHOT-jar-with-dependencies.jar
 - [x] qui gagne en cas d'égalité -> Random selon le hashcode
 - [x] enchère négatives permises
 - [ ] anciennes enchères se relancent avec les nouvelles --> fieldtext de l'ancienne enchère réapparait
-- [ ] finir l'enchère quand tout le monde a bid sans attendre fin du timer
+- [x] finir l'enchère quand tout le monde a bid sans attendre fin du timer
 - [ ] gestion des déconnexions pendant enchère --> timeElapsed non appelé par le client qui se déconnecte, l'enchère ne s'arrête jamais
 - [x] durant l'enchère on ne sait pas qui l'emporte
 - [x] erreur si personne ne bid au premier tour
 - [ ] correction options host et port
-- [ ] catch l'exception lorsque le client est lancé sans serveur
+- [x] catch l'exception lorsque le client est lancé sans serveur
