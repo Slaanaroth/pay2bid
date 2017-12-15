@@ -74,7 +74,7 @@ public class Server extends UnicastRemoteObject implements IServer {
      */
     private void launchAuction() throws RemoteException {
         auctionInProgress = true;
-        nbParticipants = clients.size();
+        nbParticipants = clients.size() - 1; // we do not count the seller as an active participant
 
         currentAuction = auctions.poll();
         LOGGER.info("Auction '" + currentAuction.getName() + "' launched !");
@@ -199,7 +199,7 @@ public class Server extends UnicastRemoteObject implements IServer {
                 LOGGER.info("End of a round. Bid = " + maxBid + " - The current winner is " + client.getName());
 
                 // clean the data structures before the next round
-                nbParticipants = clients.size();
+                nbParticipants = clients.size() - 1;
                 bidByClient.clear();
 
                 // notify the clients of the new price & start a new round

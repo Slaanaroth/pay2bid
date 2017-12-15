@@ -38,7 +38,7 @@ public class RaiseBidButtonListener implements ActionListener {
             try {
             	int bidFieldValue = Integer.valueOf(bidField.getText());
 
-	        	if(bidFieldValue >= server.getCurrentAuction().getPrice()) {
+	        	if(bidFieldValue > server.getCurrentAuction().getPrice()) {
 	        		statusLabel.setText("New bid sent.");
 	        		
 	                server.raiseBid(client, bidFieldValue);
