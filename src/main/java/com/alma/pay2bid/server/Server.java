@@ -123,7 +123,7 @@ public class Server extends UnicastRemoteObject implements IServer {
      * Disconnect a client from the server
      * @param client
      * @throws RemoteException
-     * @throws InterruptedException 
+     * @throws InterruptedException
      */
     @Override
     public void disconnect(IClient client) throws RemoteException, InterruptedException {
@@ -195,7 +195,7 @@ public class Server extends UnicastRemoteObject implements IServer {
                     }
                 }
                 currentAuction.setPrice(maxBid);
-                
+
                 LOGGER.info("End of a round. Bid = " + maxBid + " - The current winner is " + client.getName());
 
                 // clean the data structures before the next round

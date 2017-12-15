@@ -180,10 +180,18 @@ public class ClientGui {
             auctionPanel.removeAll();
             final AuctionView auction = new AuctionView(auctionBean);
 
+
             JButton raiseBidButton = new JButton("Raise the bid");
             raiseBidButton.setActionCommand("raiseBid");
             raiseBidButton.addActionListener(new RaiseBidButtonListener(client, client.getServer(), auction, statusLabel));
+            if (this.client.getEstVendeur()) {
+              raiseBidButton.setEnabled(false);
+              raiseBidButton.setVisible(false);
+              auction.setEnableBidTextField(false);
+              auction.setEnableBidTextFieldVisible(false);
+            }
             auction.setRaiseButton(raiseBidButton);
+
 
             //Now add the observer to receive all price updates
             client.addNewPriceObserver(new INewPriceObserver() {

@@ -110,4 +110,13 @@ public class AuctionView {
     public void setAuctionTimer(String time) {
         this.auctionTimer.setText(time);
     }
+
+    public void setEnableBidTextField(boolean b) {
+      this.auctionBid.setEnabled(b);
+    }
+
+    public void setEnableBidTextFieldVisible(boolean b) {
+      this.auctionBid.setVisible(b);
+      this.auctionBidLabel.setVisible(b);
+    }
 }

@@ -31,9 +31,11 @@ public class SubmitAuctionListener implements ActionListener{
             AuctionBean a = new AuctionBean(Integer.parseInt(input.getAuctionPrice()), input.getAuctionName(), input.getDescription());
             client.submit(a);
 
+
             // close the menu & refresh the status label
             input.hideFrame();
             input.getStatusLabel().setText("New auction sent...");
+
         } catch(Exception e) {
             input.getStatusLabel().setText("Price must be an Integer");
         }
