@@ -29,7 +29,7 @@ java -jar target/pay2bid-1.0-SNAPSHOT-jar-with-dependencies.jar
 # TO DO
 
 - [x] Le client proposant l'enchère ne devrait pas pouvoir bid sur celle-ci
-- [ ] Pour le vendeur, les champs pour bid réapparaissent à chaque fin de nouveau round, on devrait rien voir
+- [x] Pour le vendeur, les champs pour bid réapparaissent à chaque fin de nouveau round, on devrait rien voir
 - [x] identificateurs pour les ≠ clients
 - [ ] séparation par thèmes
 - [x] qui gagne en cas d'égalité -> Random selon le hashcode
