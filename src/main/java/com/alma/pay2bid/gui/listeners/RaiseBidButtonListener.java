@@ -35,15 +35,24 @@ public class RaiseBidButtonListener implements ActionListener {
     public void actionPerformed(ActionEvent actionEvent) {
         String command = actionEvent.getActionCommand();
         if("raiseBid".equals(command))  {
-            statusLabel.setText("New bid sent.");
             try {
-                server.raiseBid(client, Integer.valueOf(bidField.getText()));
-                auctionView.disable();
-                try {
-					server.timeElapsed(this.client);
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
+            	int bidFieldValue = Integer.valueOf(bidField.getText());
+
+	        	if(bidFieldValue >= server.getCurrentAuction().getPrice()) {
+	        		statusLabel.setText("New bid sent.");
+	        		
+	                server.raiseBid(client, bidFieldValue);
+	                auctionView.disable();
+	                try {
+						server.timeElapsed(this.client);
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+	        	}
+	        	else
+	        		statusLabel.setText("Bid must higher than the current auction");
+
+	            
             } catch (RemoteException e) {
                 e.printStackTrace();
             }

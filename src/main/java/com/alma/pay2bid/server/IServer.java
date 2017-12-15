@@ -1,10 +1,10 @@
 package com.alma.pay2bid.server;
 
-import com.alma.pay2bid.bean.AuctionBean;
-import com.alma.pay2bid.client.IClient;
-
 import java.rmi.Remote;
 import java.rmi.RemoteException;
+
+import com.alma.pay2bid.bean.AuctionBean;
+import com.alma.pay2bid.client.IClient;
 
 /**
  * The interface that specifies the actions of a server in our model
@@ -43,4 +43,6 @@ public interface IServer extends Remote {
     void timeElapsed(IClient client) throws RemoteException, InterruptedException;
 
     IClient getWinner() throws RemoteException;
+    
+    AuctionBean getCurrentAuction() throws RemoteException;
 }

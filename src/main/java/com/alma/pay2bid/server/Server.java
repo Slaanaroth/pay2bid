@@ -209,6 +209,10 @@ public class Server extends UnicastRemoteObject implements IServer {
             }
         }
     }
+    
+    public AuctionBean getCurrentAuction() throws RemoteException{
+    	return currentAuction;
+    }
 
     public IClient getWinner() throws RemoteException{
       return winner;
