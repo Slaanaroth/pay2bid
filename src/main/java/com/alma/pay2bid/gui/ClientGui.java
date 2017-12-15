@@ -198,7 +198,9 @@ public class ClientGui {
                 @Override
                 public void updateNewPrice(UUID auctionID, Integer price) {
                     setAuctionPrice(auctionID, price);
-                    auction.enable();
+                    if (!client.getEstVendeur()) {
+                    		auction.enable();
+                    }		
                 }
             });
 
