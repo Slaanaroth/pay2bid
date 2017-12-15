@@ -40,3 +40,4 @@ java -jar target/pay2bid-1.0-SNAPSHOT-jar-with-dependencies.jar
 - [x] erreur si personne ne bid au premier tour
 - [ ] correction options host et port
 - [x] catch l'exception lorsque le client est lancé sans serveur
+- [ ] Erreur quand les clients raise un prix inférieur à celui en cours
