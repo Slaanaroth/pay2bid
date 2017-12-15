@@ -177,6 +177,7 @@ public class ClientGui {
         if(!auctionList.containsKey(auctionBean.getUUID())) {
             LOGGER.info("Add new auction to auctionPanel");
 
+            auctionPanel.removeAll();
             final AuctionView auction = new AuctionView(auctionBean);
 
             JButton raiseBidButton = new JButton("Raise the bid");
