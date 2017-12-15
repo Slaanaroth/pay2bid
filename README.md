@@ -28,16 +28,17 @@ java -jar target/pay2bid-1.0-SNAPSHOT-jar-with-dependencies.jar
 
 # TO DO
 
-- [ ] Le client proposant l'enchère ne devrait pas pouvoir bid sur celle-ci
+- [x] Le client proposant l'enchère ne devrait pas pouvoir bid sur celle-ci
+- [ ] Pour le vendeur, les champs pour bid réapparaissent à chaque fin de nouveau round, on devrait rien voir
 - [x] identificateurs pour les ≠ clients
 - [ ] séparation par thèmes
 - [x] qui gagne en cas d'égalité -> Random selon le hashcode
 - [x] enchère négatives permises
 - [x] anciennes enchères se relancent avec les nouvelles --> fieldtext de l'ancienne enchère réapparait
-- [x] finir l'enchère quand tout le monde a bid sans attendre fin du timer
+- [ ] finir l'enchère quand tout le monde a bid sans attendre fin du timer -> TODO : enlever le timer pour le vendeur (qui ne peut pas bid maintenant)
 - [x] gestion des déconnexions pendant enchère --> timeElapsed non appelé par le client qui se déconnecte, l'enchère ne s'arrête jamais
 - [x] durant l'enchère on ne sait pas qui l'emporte
 - [x] erreur si personne ne bid au premier tour
 - [ ] correction options host et port
 - [x] catch l'exception lorsque le client est lancé sans serveur
-- [ ] Erreur quand les clients raise un prix inférieur à celui en cours
+- [x] Erreur quand les clients raise un prix inférieur à celui en cours

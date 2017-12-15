@@ -75,6 +75,7 @@ public class Client extends UnicastRemoteObject implements IClient, IBidSoldObse
     private String name;
     private String timeElapsed;
     private ClientState state;
+    private boolean estVendeur;
 
     // collections of observers used to connect the client to the GUI
     private transient Collection<ITimerObserver> newTimerObservers = new ArrayList<ITimerObserver>();
@@ -97,6 +98,7 @@ public class Client extends UnicastRemoteObject implements IClient, IBidSoldObse
         identity = new ClientBean(UUID.randomUUID(), name, "default password", name);
         this.server = server;
         this.name = "inconnu";
+        this.estVendeur = false;
         state = ClientState.WAITING;
     }
 
@@ -130,7 +132,8 @@ public class Client extends UnicastRemoteObject implements IClient, IBidSoldObse
     @Override
     public void submit(AuctionBean auction) throws RemoteException {
         LOGGER.info("New auction submitted to the server");
-
+        this.estVendeur = true;
+        LOGGER.info("estVendeur du client ="+ estVendeur);
         server.placeAuction(auction);
     }
 
@@ -144,6 +147,8 @@ public class Client extends UnicastRemoteObject implements IClient, IBidSoldObse
         LOGGER.info((buyer == null ? "nobody" : buyer.getName()) + " won " + currentAuction.getName());
 
         currentAuction = null;
+
+        this.estVendeur = false;
 
         timer.cancel();
         timer = null;
@@ -245,5 +250,12 @@ public class Client extends UnicastRemoteObject implements IClient, IBidSoldObse
     @Override
     public boolean removeTimerObserver(ITimerObserver observer) {
         return newTimerObservers.remove(observer);
+    }
+
+    public boolean getEstVendeur(){
+      return this.estVendeur;
+    }
+    public void setEstVendeur(boolean v) throws RemoteException{
+      this.estVendeur = v ;
     }
 }
