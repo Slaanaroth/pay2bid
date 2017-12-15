@@ -115,7 +115,8 @@ public class ClientGui {
             @Override
             public void windowClosing(WindowEvent windowEvent){
                 try {
-                    server.timeElapsed(client);
+                	
+                    //server.timeElapsed(client); already done in server.disconnect(client)
                     server.disconnect(client);
                 } catch (RemoteException e) {
                     e.printStackTrace();
