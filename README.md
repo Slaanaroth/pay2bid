@@ -42,5 +42,5 @@ java -jar target/pay2bid-1.0-SNAPSHOT-jar-with-dependencies.jar
 - [ ] correction options host et port
 - [x] catch l'exception lorsque le client est lancé sans serveur
 - [x] Erreur quand les clients raise un prix inférieur à celui en cours
-- [ ] estVendeur géré uniquement localement si plusieurs enchères dans la queue on ne sait plus qui est vendeur 
+- [x] estVendeur géré uniquement localement si plusieurs enchères dans la queue on ne sait plus qui est vendeur 
 

@@ -28,7 +28,7 @@ public class SubmitAuctionListener implements ActionListener{
     public void actionPerformed(ActionEvent actionEvent) {
         try {
             // send the new auction to the server through the client
-            AuctionBean a = new AuctionBean(Integer.parseInt(input.getAuctionPrice()), input.getAuctionName(), input.getDescription());
+            AuctionBean a = new AuctionBean(Integer.parseInt(input.getAuctionPrice()), input.getAuctionName(), input.getDescription(), client.getName());
             client.submit(a);
 
 

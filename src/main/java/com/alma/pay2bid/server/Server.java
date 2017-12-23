@@ -77,7 +77,7 @@ public class Server extends UnicastRemoteObject implements IServer {
         nbParticipants = clients.size() - 1; // we do not count the seller as an active participant
 
         currentAuction = auctions.poll();
-        LOGGER.info("Auction '" + currentAuction.getName() + "' launched !");
+        LOGGER.info("Auction '" + currentAuction.getName() + "' by "+currentAuction.getVendeur()+" launched !");
 
         // notify the client's that a new auction has begun
         for (IClient client : clients) {
@@ -95,7 +95,7 @@ public class Server extends UnicastRemoteObject implements IServer {
         // generate a new UUID for the incoming auction, then put it in the queue
         auction.setUuid(UUID.randomUUID());
         auctions.add(auction);
-        LOGGER.info("Auction '" + auction.getName() + "' placed in queue");
+        LOGGER.info("Auction '" + auction.getName() + "' from "+auction.getVendeur()+"placed in queue");
         if (!auctionInProgress && (auctions.size() == 1) && (clients.size() >= MIN_NUMBER_CLIENTS)) {
             launchAuction();
         }
@@ -169,7 +169,7 @@ public class Server extends UnicastRemoteObject implements IServer {
     @Override
     public synchronized void timeElapsed(IClient client) throws RemoteException, InterruptedException {
         nbParticipants--;
-        LOGGER.info("A client time elapsed");
+        LOGGER.info("A client time elapsed : " + client.getName());
         if (nbParticipants == 0) {
             // case of a blank round : the auction is completed
             if(bidByClient.size() == 0) {

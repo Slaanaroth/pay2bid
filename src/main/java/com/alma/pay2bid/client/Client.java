@@ -42,7 +42,9 @@ public class Client extends UnicastRemoteObject implements IClient, IBidSoldObse
                 time -=TIME_TO_REFRESH;
                 timeString = Long.toString(time/1000);
                 if(time == 0) {
-                    server.timeElapsed(Client.this);
+                		if (!Client.this.estVendeur) {
+                			server.timeElapsed(Client.this);
+                		}
                 } else {
                     for(ITimerObserver o : newTimerObservers){
                         o.updateTimer(timeString);
@@ -110,7 +112,11 @@ public class Client extends UnicastRemoteObject implements IClient, IBidSoldObse
     @Override
     public void newAuction(AuctionBean auction) throws RemoteException {
         LOGGER.info("New auction received from the server");
-
+        if (this.getName().equals(auction.getVendeur())) {
+    			this.setEstVendeur(true);
+        } else { 
+    			this.setEstVendeur(false);
+        }
         currentAuction = auction;
 
         timer = new Timer();
@@ -132,8 +138,6 @@ public class Client extends UnicastRemoteObject implements IClient, IBidSoldObse
     @Override
     public void submit(AuctionBean auction) throws RemoteException {
         LOGGER.info("New auction submitted to the server");
-        this.estVendeur = true;
-        LOGGER.info("estVendeur du client ="+ estVendeur);
         server.placeAuction(auction);
     }
 
