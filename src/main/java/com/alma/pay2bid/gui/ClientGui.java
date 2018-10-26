@@ -55,7 +55,7 @@ public class ClientGui {
         this.client = client;
         this.server = server;
         auctionList = new HashMap<UUID, AuctionView>();
-        server.register(this.client);
+
 
         client.addNewAuctionObserver(new INewAuctionObserver() {
             @Override
@@ -72,7 +72,7 @@ public class ClientGui {
     /**
      * Initialize the GUI & populate it with the base elements
      */
-    private void createGui() {
+    private void createGui() throws InterruptedException {
         // Create the Main JFrame
         mainFrame = new JFrame("Pay2Bid - Auction");
         Dimension dimension = new Dimension(500, 500);
@@ -91,22 +91,28 @@ public class ClientGui {
 
         while (hasName == false) {
 
-        int selectedOption = JOptionPane.showOptionDialog(null, panel, "", JOptionPane.NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, options , options[0]);
+            int selectedOption = JOptionPane.showOptionDialog(null, panel, "", JOptionPane.NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, options , options[0]);
 
-        if(selectedOption == 0)
-        {
-        String text = txt.getText();
-          if (text.length() > 1 ) {
-            hasName = true;
-            try {
-              client.setName(text);
-            } catch (RemoteException e) {
-              e.printStackTrace();
+            if(selectedOption == 0)
+            {
+                String text = txt.getText();
+                if (text.length() > 1 ) {
+
+                    try {
+                        client.setName(text);
+                        hasName = server.register(this.client);
+                    } catch (RemoteException e) {
+                        e.printStackTrace();
+                    }
+                    if (hasName){
+                        JOptionPane.showMessageDialog(mainFrame, "Bonjour " + text + '!');
+                    }
+                    else{
+                        JOptionPane.showMessageDialog(mainFrame, text + " est déjà pris.");
+                    }
+                }
             }
-            JOptionPane.showMessageDialog(mainFrame, "Bonjour " + text + '!');
-          }
         }
-      }
 
 
 
@@ -185,10 +191,10 @@ public class ClientGui {
             raiseBidButton.setActionCommand("raiseBid");
             raiseBidButton.addActionListener(new RaiseBidButtonListener(client, client.getServer(), auction, statusLabel));
             if (this.client.getEstVendeur()) {
-              raiseBidButton.setEnabled(false);
-              raiseBidButton.setVisible(false);
-              auction.setEnableBidTextField(false);
-              auction.setEnableBidTextFieldVisible(false);
+                raiseBidButton.setEnabled(false);
+                raiseBidButton.setVisible(false);
+                auction.setEnableBidTextField(false);
+                auction.setEnableBidTextFieldVisible(false);
             }
             auction.setRaiseButton(raiseBidButton);
 
@@ -199,8 +205,8 @@ public class ClientGui {
                 public void updateNewPrice(UUID auctionID, Integer price) {
                     setAuctionPrice(auctionID, price);
                     if (!client.getEstVendeur()) {
-                    		auction.enable();
-                    }		
+                        auction.enable();
+                    }
                 }
             });
 
@@ -243,9 +249,9 @@ public class ClientGui {
         //UPDATE AUCTION IN OUR LIST
         auction.setPrice(newPrice);
 
-          //update the current winner
+        //update the current winner
         try {
-          auction.setCurrentWinner(server.getWinner().getName());
+            auction.setCurrentWinner(server.getWinner().getName());
         } catch (RemoteException e){
             e.printStackTrace();
         }

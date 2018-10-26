@@ -24,7 +24,7 @@ public interface IServer extends Remote {
      * @throws RemoteException
      * @throws InterruptedException
      */
-    void register(IClient client) throws RemoteException, InterruptedException;
+    boolean register(IClient client) throws RemoteException, InterruptedException;
 
     void disconnect(IClient client) throws RemoteException, InterruptedException;
 
@@ -43,6 +43,6 @@ public interface IServer extends Remote {
     void timeElapsed(IClient client) throws RemoteException, InterruptedException;
 
     IClient getWinner() throws RemoteException;
-    
+
     AuctionBean getCurrentAuction() throws RemoteException;
 }

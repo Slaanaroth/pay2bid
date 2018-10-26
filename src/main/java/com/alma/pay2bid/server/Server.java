@@ -8,6 +8,7 @@ import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.*;
 import java.util.logging.Logger;
+import static java.util.stream.Collectors.toList;
 
 /**
  * A Server handle the clients in our model and orchestrate the auction house
@@ -35,13 +36,13 @@ public class Server extends UnicastRemoteObject implements IServer {
             }
             clients.removeAll(clientsToRemove);
             for (IClient client : clientsToRemove) {
-              try {
-                  timeElapsed(client);
-              } catch (RemoteException e) {
-                  e.printStackTrace();
-              } catch (InterruptedException e) {
-                  e.printStackTrace();
-              }
+                try {
+                    timeElapsed(client);
+                } catch (RemoteException e) {
+                    e.printStackTrace();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
             }
         }
     }
@@ -107,15 +108,30 @@ public class Server extends UnicastRemoteObject implements IServer {
      * @throws RemoteException
      */
     @Override
-    public synchronized void register(IClient client) throws RemoteException {
+    public synchronized boolean register(IClient client) throws RemoteException {
         try {
-            while (auctionInProgress) {
-                wait();
+            List<String> clientNames = this.clients.stream().map(c -> {
+                try {
+                    return c.getName();
+                } catch (RemoteException e) {
+                    e.printStackTrace();
+                    return "";
+                }
+            }).collect(toList());
+            if (clientNames.contains(client.getName())){
+                return false;
             }
-            clients.add(client);
-            LOGGER.info("client " + client.toString() + " connected");
+            else{
+                while (auctionInProgress) {
+                    wait();
+                }
+                clients.add(client);
+                LOGGER.info("client " + client.getName() + " connected");
+                return true;
+            }
         } catch (InterruptedException e) {
             LOGGER.warning(e.getMessage());
+            return false;
         }
     }
 
@@ -128,11 +144,11 @@ public class Server extends UnicastRemoteObject implements IServer {
     @Override
     public void disconnect(IClient client) throws RemoteException, InterruptedException {
         try {
-			LOGGER.info("Disconnect : Client " + client.toString());
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+            LOGGER.info("Disconnect : Client " + client.getName());
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
         this.timeElapsed(client);
         clients.remove(client);
     }
@@ -209,12 +225,12 @@ public class Server extends UnicastRemoteObject implements IServer {
             }
         }
     }
-    
+
     public AuctionBean getCurrentAuction() throws RemoteException{
-    	return currentAuction;
+        return currentAuction;
     }
 
     public IClient getWinner() throws RemoteException{
-      return winner;
+        return winner;
     }
 }
