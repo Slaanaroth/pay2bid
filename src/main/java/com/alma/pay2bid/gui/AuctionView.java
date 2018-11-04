@@ -21,6 +21,7 @@ public class AuctionView {
     private JLabel auctionTimer;
     private JLabel auctionCurrentWinnerLabel;
     private JLabel auctionCurrentWinnerValue;
+    private JLabel auctionDescriptionValue;
     private JTextField auctionBid;
     private JLabel auctionBidLabel;
     private JButton raiseButton;
@@ -37,6 +38,14 @@ public class AuctionView {
         auctionPriceValue.setLabelFor(auctionPriceLabel);
         auctionPanel.add(auctionPriceLabel);
         auctionPanel.add(auctionPriceValue);
+
+        // Create the price description
+        JLabel auctionDescriptionLabel = new JLabel(" Description : ");
+        auctionDescriptionValue = new JLabel("");
+        auctionDescriptionValue.setText(auction.getDescription());
+        auctionDescriptionValue.setLabelFor(auctionDescriptionLabel);
+        auctionPanel.add(auctionDescriptionLabel);
+        auctionPanel.add(auctionDescriptionValue);
 
         // Create the currentWinner label
         auctionCurrentWinnerLabel = new JLabel(" Current Winner is : ");
