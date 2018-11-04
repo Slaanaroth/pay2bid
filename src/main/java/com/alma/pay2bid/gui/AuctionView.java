@@ -45,6 +45,7 @@ public class AuctionView {
         JLabel auctionDescriptionLabel = new JLabel(" Description : ");
         auctionDescriptionValue = new JTextArea(auction.getDescription(),10,18);
         auctionDescriptionValue.setLineWrap(true);
+        auctionDescriptionValue.setEditable(false);
         auctionPanel.add(auctionDescriptionLabel);
         auctionPanel.add(auctionDescriptionValue);
 

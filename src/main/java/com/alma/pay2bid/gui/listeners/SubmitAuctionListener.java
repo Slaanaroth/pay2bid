@@ -5,6 +5,8 @@ import com.alma.pay2bid.client.IClient;
 import com.alma.pay2bid.gui.AuctionInput;
 import com.alma.pay2bid.gui.AuctionView;
 
+import java.rmi.ConnectException;
+
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -28,14 +30,25 @@ public class SubmitAuctionListener implements ActionListener{
     public void actionPerformed(ActionEvent actionEvent) {
         try {
             // send the new auction to the server through the client
-            AuctionBean a = new AuctionBean(Integer.parseInt(input.getAuctionPrice()), input.getAuctionName(), input.getDescription(), client.getName());
-            client.submit(a);
+
+            System.out.println("this the string:<"+input.getAuctionName()+">");
+
+            if(!input.getAuctionName().isEmpty()) {
 
 
-            // close the menu & refresh the status label
-            input.hideFrame();
-            input.getStatusLabel().setText("New auction sent...");
 
+              AuctionBean a = new AuctionBean(Integer.parseInt(input.getAuctionPrice()), input.getAuctionName(), input.getDescription(), client.getName());
+              client.submit(a);
+
+              // close the menu & refresh the status label
+              input.hideFrame();
+              input.getStatusLabel().setText("New auction sent...");
+            } else {
+              input.getStatusLabel().setText("You must name whatever the hell it is that you sell");
+            }
+
+        } catch (ConnectException ce) {
+            input.getStatusLabel().setText("Error: Server unavailable");
         } catch(Exception e) {
             input.getStatusLabel().setText("Price must be an Integer");
         }
