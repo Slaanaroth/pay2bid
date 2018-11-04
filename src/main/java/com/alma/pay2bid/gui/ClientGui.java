@@ -232,7 +232,12 @@ public class ClientGui {
             client.addTimerObserver(new ITimerObserver() {
                 @Override
                 public void updateTimer(String time) {
-                    auction.setAuctionTimer(time);
+                    if (time == "error"){
+                        auction.timerError();
+                    }
+                    else{
+                        auction.setAuctionTimer(time);
+                    }
                 }
             });
 

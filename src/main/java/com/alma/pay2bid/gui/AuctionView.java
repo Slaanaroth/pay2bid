@@ -150,4 +150,12 @@ public class AuctionView {
         this.auctionBid.setVisible(b);
         this.auctionBidLabel.setVisible(b);
     }
+
+    public void timerError() {
+        this.auctionPanel.removeAll();
+        this.auctionPanel.setBorder(BorderFactory.createEmptyBorder());
+        this.auctionPanel.add(new JLabel("Connection lost to the server"));
+        this.auctionPanel.revalidate();
+        this.auctionPanel.repaint();
+    }
 }

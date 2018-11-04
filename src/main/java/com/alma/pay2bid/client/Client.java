@@ -12,6 +12,7 @@ import com.alma.pay2bid.client.observer.INewPriceObserver;
 import com.alma.pay2bid.client.observer.ITimerObserver;
 import com.alma.pay2bid.server.IServer;
 
+import java.rmi.ConnectException;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.*;
@@ -30,10 +31,12 @@ public class Client extends UnicastRemoteObject implements IClient, IBidSoldObse
      */
     private class TimerManager extends TimerTask {
         private String timeString;
+        private Client client;
         private long time = TIME_TO_RAISE_BID;
 
-        public TimerManager(String timeMessage){
+        public TimerManager(String timeMessage,Client client){
             this.timeString = timeMessage;
+            this.client = client;
         }
 
         @Override
@@ -43,16 +46,21 @@ public class Client extends UnicastRemoteObject implements IClient, IBidSoldObse
                 timeString = Long.toString(time/1000);
                 if(time == 0) {
                 		if (!Client.this.estVendeur) {
-                			server.timeElapsed(Client.this);
+                		    server.timeElapsed(Client.this);
                 		}
-                } else {
+                }
+                else if (time < 0){
+                    for(ITimerObserver o : newTimerObservers){
+                        o.updateTimer("error");
+                    }
+                    client.timer.cancel();
+                }
+                else {
                     for(ITimerObserver o : newTimerObservers){
                         o.updateTimer(timeString);
                     }
                 }
-            } catch (RemoteException e) {
-                e.printStackTrace();
-            } catch (InterruptedException e) {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }
@@ -91,7 +99,6 @@ public class Client extends UnicastRemoteObject implements IClient, IBidSoldObse
      *     IServer server = (IServer) LocateRegistry.getRegistry(host, port).lookup("Server");
      * </pre>
      * @param server
-     * @param name
      * @throws RemoteException
      */
     public Client(IServer server) throws RemoteException {
@@ -120,7 +127,7 @@ public class Client extends UnicastRemoteObject implements IClient, IBidSoldObse
         currentAuction = auction;
 
         timer = new Timer();
-        timer.schedule(new TimerManager(timeElapsed),0, TIME_TO_REFRESH);
+        timer.schedule(new TimerManager(timeElapsed,this),0, TIME_TO_REFRESH);
 
         state = ClientState.WAITING;
 
@@ -183,7 +190,7 @@ public class Client extends UnicastRemoteObject implements IClient, IBidSoldObse
         }
 
         timer = new Timer();
-        timer.schedule(new TimerManager(timeElapsed),0, TIME_TO_REFRESH);
+        timer.schedule(new TimerManager(timeElapsed,this),0, TIME_TO_REFRESH);
 
         state = ClientState.WAITING;
 
