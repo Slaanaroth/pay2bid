@@ -75,7 +75,7 @@ public class AuctionView {
     }
 
     public void setCurrentWinner(String name) {
-      auctionCurrentWinnerValue.setText(name);
+        auctionCurrentWinnerValue.setText(name);
     }
 
     public void enable() {
@@ -92,7 +92,12 @@ public class AuctionView {
     }
 
     public void setWinner(String name) {
-        auctionBidLabel.setText("Winner : " + name);
+        if (name == null){
+            auctionBidLabel.setText("No winner for this auction");
+        }
+        else {
+            auctionBidLabel.setText("Winner : " + name);
+        }
         auctionCurrentWinnerLabel.setVisible(false);
         auctionCurrentWinnerValue.setVisible(false);
         auctionBid.setVisible(false);
@@ -121,11 +126,11 @@ public class AuctionView {
     }
 
     public void setEnableBidTextField(boolean b) {
-      this.auctionBid.setEnabled(b);
+        this.auctionBid.setEnabled(b);
     }
 
     public void setEnableBidTextFieldVisible(boolean b) {
-      this.auctionBid.setVisible(b);
-      this.auctionBidLabel.setVisible(b);
+        this.auctionBid.setVisible(b);
+        this.auctionBidLabel.setVisible(b);
     }
 }

@@ -74,6 +74,7 @@ public class Server extends UnicastRemoteObject implements IServer {
      * Launch a new auction
      */
     private void launchAuction() throws RemoteException {
+        winner = null;
         auctionInProgress = true;
         nbParticipants = clients.size() - 1; // we do not count the seller as an active participant
 
