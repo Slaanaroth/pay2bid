@@ -26,6 +26,7 @@ public class AuctionView {
     private JTextField auctionBid;
     private JLabel auctionBidLabel;
     private JButton raiseButton;
+    private JButton skipButton;
 
     public AuctionView(AuctionBean auction){
         auctionPanel = new JPanel();
@@ -84,6 +85,7 @@ public class AuctionView {
         raiseButton.setVisible(true);
         auctionTimer.setVisible(true);
         auctionTimerLabel.setVisible(true);
+        skipButton.setVisible(true);
     }
 
     public void disable() {
@@ -93,6 +95,7 @@ public class AuctionView {
         raiseButton.setVisible(false);
         auctionTimer.setVisible(false);
         auctionTimerLabel.setVisible(false);
+        skipButton.setVisible(false);
     }
 
     public void setWinner(String name) {
@@ -102,17 +105,24 @@ public class AuctionView {
         else {
             auctionBidLabel.setText("Winner : " + name);
         }
+        auctionBidLabel.setVisible(true);
         auctionCurrentWinnerLabel.setVisible(false);
         auctionCurrentWinnerValue.setVisible(false);
         auctionBid.setVisible(false);
         raiseButton.setVisible(false);
         auctionTimer.setVisible(false);
         auctionTimerLabel.setVisible(false);
+        skipButton.setVisible(false);
     }
 
     public void setRaiseButton(JButton raiseButton) {
         this.raiseButton = raiseButton;
         auctionPanel.add(raiseButton);
+    }
+
+    public void setSkipButton(JButton skipButton) {
+        this.skipButton = skipButton;
+        auctionPanel.add(skipButton);
     }
 
     public void setPrice(int newPrice){

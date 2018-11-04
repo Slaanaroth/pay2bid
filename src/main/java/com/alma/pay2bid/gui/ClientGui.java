@@ -9,6 +9,7 @@ import com.alma.pay2bid.client.observer.INewPriceObserver;
 import com.alma.pay2bid.client.observer.ITimerObserver;
 import com.alma.pay2bid.gui.listeners.AuctionInputListener;
 import com.alma.pay2bid.gui.listeners.RaiseBidButtonListener;
+import com.alma.pay2bid.gui.listeners.SkipTurnButtonListener;
 import com.alma.pay2bid.server.IServer;
 
 import javax.swing.*;
@@ -188,15 +189,21 @@ public class ClientGui {
 
 
             JButton raiseBidButton = new JButton("Raise the bid");
+            JButton skipButton = new JButton("Skip this turn");
             raiseBidButton.setActionCommand("raiseBid");
             raiseBidButton.addActionListener(new RaiseBidButtonListener(client, client.getServer(), auction, statusLabel));
+            skipButton.setActionCommand("skipTurn");
+            skipButton.addActionListener(new SkipTurnButtonListener(client,client.getServer(),auction,statusLabel));
             if (this.client.getEstVendeur()) {
                 raiseBidButton.setEnabled(false);
                 raiseBidButton.setVisible(false);
+                skipButton.setEnabled(false);
+                skipButton.setVisible(false);
                 auction.setEnableBidTextField(false);
                 auction.setEnableBidTextFieldVisible(false);
             }
             auction.setRaiseButton(raiseBidButton);
+            auction.setSkipButton(skipButton);
 
 
             //Now add the observer to receive all price updates
